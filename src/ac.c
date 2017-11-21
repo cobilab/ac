@@ -68,6 +68,8 @@ refNModels, INF *I){
       #endif
       }
 
+  fprintf(stderr, "Using %u probabilistic models\n", totModels);
+
   pModel        = (PModel  **) Calloc(totModels, sizeof(PModel *));
   for(n = 0 ; n < totModels ; ++n)
     pModel[n]   = CreatePModel(AL->cardinality);
