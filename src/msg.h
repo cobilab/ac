@@ -3,9 +3,10 @@
 
 #include "defs.h"
 
-void ModelsExplanation(void);
-void PrintMenu(void);
-void PrintVersion(void);
+void   ModelsExplanation  (void);
+void   PrintMenu          (void);
+void   PrintMenuD         (void);
+void   PrintVersion       (void);
 
 #endif
 

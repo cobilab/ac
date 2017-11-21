@@ -11,6 +11,6 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 SET(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 SET(CMAKE_BUILD_TYPE Release)
 
-add_executable (AC ac.c mem.c msg.c alphabet.c common.c buffer.c levels.c context.c bitio.c arith.c arith_aux.c defs.h) 
-add_executable (AD ad.c mem.c msg.c alphabet.c common.c buffer.c levels.c context.c bitio.c arith.c arith_aux.c defs.h) 
+add_executable (AC ac.c mem.c msg.c alphabet.c hash.c array.c pmodels.c common.c buffer.c levels.c context.c bitio.c arith.c arith_aux.c defs.h) 
+add_executable (AD ad.c mem.c msg.c alphabet.c hash.c array.c pmodels.c common.c buffer.c levels.c context.c bitio.c arith.c arith_aux.c defs.h) 
 

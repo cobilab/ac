@@ -18,6 +18,25 @@ void ModelsExplanation(void){
   "                         deep contexts), under the estimator <e>,      \n");
   } 
 
+void PrintMenuD(void){
+  fprintf(stderr,
+  "Usage: AD [OPTION]... -r [FILE]  [FILE]:[...]                          \n"
+  "Decompression of amino acid sequences (compressed by AC).              \n"
+  "                                                                       \n"
+  "Non-mandatory arguments:                                               \n"
+  "                                                                       \n"
+  "  -h                    give this help,                                \n"
+  "  -v                    verbose mode (more information),               \n"
+  "                                                                       \n"
+  "  -r <FILE>             reference file,                                \n"
+  "                                                                       \n"
+  "Mandatory arguments:                                                   \n"
+  "                                                                       \n"
+  "  <FILE>                file to uncompress (last argument). For        \n"
+  "                        more files use splitting \":\" characters.     \n"
+  "                                                                       \n"
+  "Report bugs to <pratas@ua.pt>.                                         \n");
+  }
 
 void PrintMenu(void){
   fprintf(stderr,
@@ -31,7 +50,7 @@ void PrintMenu(void){
   "  -v                     verbose mode (more information),              \n"
   "  -V                     display version number,                       \n"
   "  -f                     force overwrite of output,                    \n"
-  "  -l <level>             level of compression [1;5] (lazy -rm setup),  \n"
+  "  -l <level>             level of compression [1;5] (lazy -tm setup),  \n"
   "  -t <threshold>         threshold frequency to discard from alphabet, \n"
   "  -g <gamma>             mixture decayment forgetting factor. It is    \n"
   "                         a real value in the interval [0;1),           \n");

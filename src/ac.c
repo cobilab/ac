@@ -12,6 +12,7 @@
 #include "alphabet.h"
 #include "levels.h"
 #include "common.h"
+#include "pmodels.h"
 #include "context.h"
 #include "bitio.h"
 #include "arith.h"
@@ -28,12 +29,12 @@ refNModels, INF *I){
   uint32_t    n, k, x, cModel, totModels, idxPos;
   int32_t     idx = 0;
   uint64_t    i, size = 0;
-  double      *cModelWeight, cModelTotalWeight = 0;
   uint8_t     *readerBuffer, sym, irSym, *pos, type = 0, 
               header = 1, line = 0, dna = 0;
   PModel      **pModel, *MX;
   FloatPModel *PT;
   CBUF        *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
+  CMWeight    *WM;
 
   if(P->verbose)
     fprintf(stderr, "Analyzing data and creating models ...\n");
@@ -72,11 +73,8 @@ refNModels, INF *I){
     pModel[n]   = CreatePModel(AL->cardinality);
   MX            = CreatePModel(AL->cardinality);
   PT            = CreateFloatPModel(AL->cardinality);
+  WM            = CreateWeightModel(totModels);
   readerBuffer  = (uint8_t *) Calloc(BUFFER_SIZE, sizeof(uint8_t));
-  cModelWeight  = (double   *) Calloc(totModels, sizeof(double));
-  
-  for(n = 0 ; n < totModels ; ++n)
-    cModelWeight[n] = 1.0 / totModels;
 
   for(n = 0 ; n < P->nModels ; ++n){
     if(P->model[n].type == TARGET){
@@ -130,16 +128,6 @@ refNModels, INF *I){
 
       CalcProgress(size, ++i);
       
-      /*
-      if(IsLowChar(AL, readerBuffer[idxPos]) == 1){
-        #ifdef ESTIMATE
-        if(P->estim != 0)
-          fprintf(IAE, "%.3g\n", log2(AL->cardinality));
-        #endif
-        continue;
-        }
-      */
-
       symBuf->buf[symBuf->idx] = sym = AL->revMap[ readerBuffer[idxPos] ];
       memset((void *)PT->freqs, 0, AL->cardinality * sizeof(double));
 
@@ -149,22 +137,19 @@ refNModels, INF *I){
         CModel *CM = cModels[cModel];
         GetPModelIdx(pos, CM);
         ComputePModel(CM, pModel[n], CM->pModelIdx, CM->alphaDen);
-        ComputeWeightedFreqs(cModelWeight[n], pModel[n], PT, CM->nSym);
+        ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
         if(CM->edits != 0){
           ++n;
           CM->SUBS.seq->buf[CM->SUBS.seq->idx] = sym;
           CM->SUBS.idx = GetPModelIdxCorr(CM->SUBS.seq->buf+
           CM->SUBS.seq->idx-1, CM, CM->SUBS.idx);
           ComputePModel(CM, pModel[n], CM->SUBS.idx, CM->SUBS.eDen);
-          ComputeWeightedFreqs(cModelWeight[n], pModel[n], PT, CM->nSym);
+          ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
           }
         ++n;
         }
 
-      MX->sum = 0;
-      for(x = 0 ; x < AL->cardinality ; ++x){
-        MX->sum += MX->freqs[x] = 1 + (unsigned) (PT->freqs[x] * MX_PMODEL);
-        }
+      ComputeMXProbs(PT, MX, AL->cardinality);
 
       AESym(sym, (int *)(MX->freqs), (int) MX->sum, Writter);
       #ifdef ESTIMATE
@@ -172,19 +157,13 @@ refNModels, INF *I){
         fprintf(IAE, "%.3g\n", PModelSymbolNats(MX, sym) / M_LN2);
       #endif
 
-      cModelTotalWeight = 0;
-      for(n = 0 ; n < totModels ; ++n){
-        cModelWeight[n] = Power(cModelWeight[n], P->gamma) * (double) 
-        pModel[n]->freqs[sym] / pModel[n]->sum;
-        cModelTotalWeight += cModelWeight[n];
-        }
+      CalcDecayment(WM, pModel, sym, P->gamma);
 
       for(n = 0 ; n < P->nModels ; ++n)
         if(cModels[n]->ref == TARGET)
           UpdateCModelCounter(cModels[n], sym, cModels[n]->pModelIdx);
 
-      for(n = 0 ; n < totModels ; ++n)
-        cModelWeight[n] /= cModelTotalWeight; // RENORMALIZE THE WEIGHTS
+      RenormalizeWeights(WM);
 
       n = 0;
       for(cModel = 0 ; cModel < P->nModels ; ++cModel){
@@ -210,21 +189,21 @@ refNModels, INF *I){
 
   Free(MX);
   Free(name);
-  Free(cModelWeight);
   for(n = 0 ; n < P->nModels ; ++n)
     if(P->model[n].type == REFERENCE)
       ResetCModelIdx(cModels[n]);
     else
-      FreeCModel(cModels[n]);
+      RemoveCModel(cModels[n]);
   for(n = 0 ; n < totModels ; ++n){
-    Free(pModel[n]->freqs);
-    Free(pModel[n]);
+    RemovePModel(pModel[n]);
     }
   Free(pModel);
+
   Free(PT);
   Free(readerBuffer);
   RemoveCBuffer(symBuf);
   RemoveAlphabet(AL);
+  RemoveWeightModel(WM);
   int card = AL->cardinality;
   fclose(Reader);
 

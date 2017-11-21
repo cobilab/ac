@@ -25,12 +25,12 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   FILE        *Writter = Fopen(name, "w");
   uint64_t    nSymbols = 0;
   uint32_t    n, k, x, cModel, totModels;
-  double      *cModelWeight, cModelTotalWeight = 0;
   int32_t     idx = 0, idxOut = 0;
   uint8_t     *outBuffer, sym = 0, *pos;
   CBUF        *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
   PModel      **pModel, *MX;
   FloatPModel *PT;
+  CMWeight    *WM;
   uint64_t    i = 0;
 
   if(P->verbose)
@@ -72,7 +72,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   totModels = P[id].nModels;
   for(n = 0 ; n < P[id].nModels ; ++n)
     if(P[id].model[n].edits != 0)
-      totModels += 1; // SUBS           
+      ++totModels; // TOLERANT
 
   nSymbols      = P[id].size;
   pModel        = (PModel  **) Calloc(totModels, sizeof(PModel *));
@@ -81,10 +81,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   MX            = CreatePModel(AL->cardinality);
   PT            = CreateFloatPModel(AL->cardinality);
   outBuffer     = (uint8_t  *) Calloc(BUFFER_SIZE, sizeof(uint8_t));
-  cModelWeight  = (double   *) Calloc(totModels, sizeof(double ));
-
-  for(n = 0 ; n < totModels ; ++n)
-    cModelWeight[n] = 1.0 / totModels;
+  WM            = CreateWeightModel(totModels);
 
   for(n = 0 ; n < P[id].nModels ; ++n){
     if(P[id].model[n].type == TARGET)
@@ -104,7 +101,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
       GetPModelIdx(pos, cModels[cModel]);
       ComputePModel(cModels[cModel], pModel[n], cModels[cModel]->pModelIdx,
       cModels[cModel]->alphaDen);
-      ComputeWeightedFreqs(cModelWeight[n], pModel[n], PT, AL->cardinality);
+      ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, AL->cardinality);
       if(cModels[cModel]->edits != 0){ // SUBSTITUTIONAL HANDLING
         ++n;
         cModels[cModel]->SUBS.idx = GetPModelIdxCorr(cModels[cModel]->SUBS.seq
@@ -112,15 +109,12 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
         ->SUBS.idx);
         ComputePModel(cModels[cModel], pModel[n], cModels[cModel]->SUBS.idx,
         cModels[cModel]->SUBS.eDen);
-        ComputeWeightedFreqs(cModelWeight[n], pModel[n], PT, AL->cardinality);
+        ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, AL->cardinality);
         }
       ++n;
       }
 
-    MX->sum = 0;
-    for(x = 0 ; x < AL->cardinality ; ++x){
-      MX->sum += MX->freqs[x] = 1 + (unsigned) (PT->freqs[x] * MX_PMODEL);
-      }
+    ComputeMXProbs(PT, MX, AL->cardinality);
 
     symBuf->buf[symBuf->idx] = sym = ArithDecodeSymbol(AL->cardinality, (int *) 
     MX->freqs, (int) MX->sum, Reader);
@@ -131,20 +125,14 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
         cModels[n]->SUBS.seq->buf[cModels[n]->SUBS.seq->idx] = sym;
         }         
 
-    cModelTotalWeight = 0;
-    for(n = 0 ; n < totModels ; ++n){
-      cModelWeight[n] = Power(cModelWeight[n], P[id].gamma) * (double)
-      pModel[n]->freqs[sym] / pModel[n]->sum;
-      cModelTotalWeight += cModelWeight[n];
-      }
+    CalcDecayment(WM, pModel, sym, P->gamma);
 
     for(n = 0 ; n < P[id].nModels ; ++n){
       if(P[id].model[n].type == TARGET)
         UpdateCModelCounter(cModels[n], sym, cModels[n]->pModelIdx);
       }
 
-    for(n = 0 ; n < totModels ; ++n)
-      cModelWeight[n] /= cModelTotalWeight; // RENORMALIZE THE WEIGHTS
+    RenormalizeWeights(WM);
 
     n = 0;
     for(cModel = 0 ; cModel < P[id].nModels ; ++cModel){
@@ -171,18 +159,18 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   fclose(Writter);
   Free(MX);
   Free(name);
-  Free(cModelWeight);
   for(n = 0 ; n < P[id].nModels ; ++n){
     if(P[id].model[n].type == REFERENCE)
       ResetCModelIdx(cModels[n]);
     else
-      FreeCModel(cModels[n]);
+      RemoveCModel(cModels[n]);
     }
-  for(n = 0 ; n < totModels ; ++n){
-    Free(pModel[n]->freqs);
-    Free(pModel[n]);
-    }
+
+  for(n = 0 ; n < totModels ; ++n)
+    RemovePModel(pModel[n]);
   Free(pModel);
+
+  RemoveWeightModel(WM);
   Free(PT);
   Free(outBuffer);
   RemoveCBuffer(symBuf);
@@ -276,23 +264,7 @@ int32_t main(int argc, char *argv[]){
   clock_t     stop = 0, start = clock();
   
   if((help = ArgsState(DEFAULT_HELP, p, argc, "-h")) == 1 || argc < 2){
-    fprintf(stderr,
-    "Usage: AD [OPTION]... -r [FILE]  [FILE]:[...]                      \n"
-    "Decompression of amino acid sequences (compressed by AC).          \n"
-    "                                                                   \n"
-    "Non-mandatory arguments:                                           \n"
-    "                                                                   \n"
-    "  -h                    give this help,                            \n"
-    "  -v                    verbose mode (more information),           \n"
-    "                                                                   \n"
-    "  -r <FILE>             reference file,                            \n"
-    "                                                                   \n"
-    "Mandatory arguments:                                               \n"
-    "                                                                   \n"
-    "  <FILE>                file to uncompress (last argument). For    \n"
-    "                        more files use splitting \":\" characters. \n"
-    "                                                                   \n"
-    "Report bugs to <pratas@ua.pt>.                                     \n");
+    PrintMenuD();
     return EXIT_SUCCESS;
     }
 
