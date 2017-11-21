@@ -113,10 +113,10 @@ refNModels, INF *I){
   WriteNBits((int) (P->gamma * 65536), 32, Writter);
   WriteNBits(P->nModels,               16, Writter);
   for(n = 0 ; n < P->nModels ; ++n){
-    WriteNBits(cModels[n]->ctx,        16, Writter);
-    WriteNBits(cModels[n]->alphaDen,   16, Writter);
-    WriteNBits(cModels[n]->edits,       8, Writter);
-    WriteNBits(cModels[n]->SUBS.eDen,  32, Writter);
+    WriteNBits(cModels[n]->ctx,         7, Writter);
+    WriteNBits(cModels[n]->alphaDen,   11, Writter);
+    WriteNBits(cModels[n]->edits,       7, Writter);
+    WriteNBits(cModels[n]->SUBS.eDen,  11, Writter);
     WriteNBits(P->model[n].type,        1, Writter);
     }
 

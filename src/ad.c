@@ -59,10 +59,10 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   P[id].gamma            = ReadNBits(32, Reader) / 65536.0;
   P[id].nModels          = ReadNBits(16, Reader);
   for(k = 0 ; k < P[id].nModels ; ++k){
-    P[id].model[k].ctx   = ReadNBits(16, Reader);
-    P[id].model[k].den   = ReadNBits(16, Reader);
-    P[id].model[k].edits = ReadNBits( 8, Reader);
-    P[id].model[k].eDen  = ReadNBits(32, Reader);
+    P[id].model[k].ctx   = ReadNBits( 7, Reader);
+    P[id].model[k].den   = ReadNBits(11, Reader);
+    P[id].model[k].edits = ReadNBits( 7, Reader);
+    P[id].model[k].eDen  = ReadNBits(11, Reader);
     P[id].model[k].type  = ReadNBits( 1, Reader);
     }
 
@@ -314,10 +314,10 @@ int32_t main(int argc, char *argv[]){
     P[n].nModels   = ReadNBits(16, Reader);
     P[n].model     = (ModelPar *) Calloc(P[n].nModels, sizeof(ModelPar));
     for(k = 0 ; k < P[n].nModels ; ++k){
-      P[n].model[k].ctx   = ReadNBits(16, Reader); 
-      P[n].model[k].den   = ReadNBits(16, Reader); 
-      P[n].model[k].edits = ReadNBits( 8, Reader); 
-      P[n].model[k].eDen  = ReadNBits(32, Reader); 
+      P[n].model[k].ctx   = ReadNBits( 7, Reader); 
+      P[n].model[k].den   = ReadNBits(11, Reader); 
+      P[n].model[k].edits = ReadNBits( 7, Reader); 
+      P[n].model[k].eDen  = ReadNBits(11, Reader); 
       P[n].model[k].type  = ReadNBits( 1, Reader);
       if(P[n].model[k].type == 1)
         ++refNModels;
