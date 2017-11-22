@@ -94,8 +94,10 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   int pIdx = 0;
   for(n = 0 ; n < P[id].nModels ; ++n){
     WM->gamma[pIdx++] = cModels[n]->gamma;
+    fprintf(stderr, "GAMMA: %lf\n", WM->gamma[pIdx-1]);
     if(P[id].model[n].edits != 0){
       WM->gamma[pIdx++] = cModels[n]->gamma;
+      fprintf(stderr, "GAMMA: %lf\n", WM->gamma[pIdx-1]);
       }
     }
 
