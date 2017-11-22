@@ -99,7 +99,6 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
       }
     }
 
-
   i = 0;
   while(nSymbols--){
     CalcProgress(P[id].size, ++i);
