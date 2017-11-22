@@ -45,7 +45,7 @@ void CalcDecayment(CMWeight *CMW, PModel **PM, uint8_t sym, double gamma){
   uint32_t n;
   CMW->totalWeight = 0;
   for(n = 0 ; n < CMW->totModels ; ++n){
-    CMW->weight[n] = pow(CMW->weight[n], gamma) * (double) PM[n]->freqs[sym] 
+    CMW->weight[n] = Power(CMW->weight[n], gamma) * (double) PM[n]->freqs[sym] 
     / PM[n]->sum;
     CMW->totalWeight += CMW->weight[n];
     }
