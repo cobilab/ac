@@ -125,8 +125,6 @@ refNModels, INF *I){
   I[id].header = _bytes_output;
 
   // GIVE GAMMA:
-  cModels[n]->gamma;
-
   int pIdx = 0;
   for(n = 0 ; n < P->nModels ; ++n){
     WM->gamma[pIdx++] = cModels[n]->gamma;
