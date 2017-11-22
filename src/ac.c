@@ -66,9 +66,6 @@ refNModels, INF *I){
       totModels++;
       }
 
-  for(n = 0 ; n < P->nModels ; ++n)
-    fprintf(stderr, "xGM: %lf\n", P->model[n].gamma);
-
   fprintf(stderr, "Using %u probabilistic models\n", totModels);
 
   pModel        = (PModel  **) Calloc(totModels, sizeof(PModel *));
@@ -83,7 +80,6 @@ refNModels, INF *I){
     if(P->model[n].type == TARGET){
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, TARGET, 
       P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
-      fprintf(stderr, "GM: %lf\n", cModels[n]->gamma);
       }
     }
 
@@ -129,11 +125,11 @@ refNModels, INF *I){
   // GIVE GAMMA:
   int pIdx = 0;
   for(n = 0 ; n < P->nModels ; ++n){
-    fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx]);
     WM->gamma[pIdx++] = cModels[n]->gamma;
+    fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx-1]);
     if(P->model[n].edits != 0){
-      fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx]);
       WM->gamma[pIdx++] = cModels[n]->gamma;
+      fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx-1]);
       }
     }
 
