@@ -149,7 +149,7 @@ void ComputePModel(CModel *M, PModel *P, uint64_t idx, uint32_t aDen){
         hc = (HCC *) M->HT->zeroCounters;
       P->sum = 0;
       for(x = 0 ; x < M->nSym ; ++x){
-        P->freqs[x] = /*1 +*/ aDen * hc[x];
+        P->freqs[x] = 1 + aDen * hc[x];
         P->sum += P->freqs[x];
         }
     break;
@@ -158,7 +158,7 @@ void ComputePModel(CModel *M, PModel *P, uint64_t idx, uint32_t aDen){
       ac = &M->AT->counters[idx*M->nSym];
       P->sum = 0;
       for(x = 0 ; x < M->nSym ; ++x){
-        P->freqs[x] = /*1 +*/ aDen * ac[x];
+        P->freqs[x] = 1 + aDen * ac[x];
         P->sum += P->freqs[x];
         }
     break;
