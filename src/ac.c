@@ -80,6 +80,7 @@ refNModels, INF *I){
     if(P->model[n].type == TARGET){
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, TARGET, 
       P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
+      fprintf(stderr, "GM: %lf\n", cModels[n]->gamma);
       }
     }
 
