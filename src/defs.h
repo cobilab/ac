@@ -57,7 +57,7 @@ U32 garbage;
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 #define RELEASE                1
-#define VERSION                2
+#define VERSION                1
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
