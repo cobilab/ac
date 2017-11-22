@@ -63,9 +63,7 @@ refNModels, INF *I){
   totModels = P->nModels;
   for(n = 0 ; n < P->nModels ; ++n) 
     if(P->model[n].edits != 0){
-      #ifdef RUN_SUBS
       totModels++;
-      #endif
       }
 
   fprintf(stderr, "Using %u probabilistic models\n", totModels);
@@ -127,11 +125,11 @@ refNModels, INF *I){
   // GIVE GAMMA:
   int pIdx = 0;
   for(n = 0 ; n < P->nModels ; ++n){
+    fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx]);
     WM->gamma[pIdx++] = cModels[n]->gamma;
     if(P->model[n].edits != 0){
-      #ifdef RUN_SUBS
+      fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx]);
       WM->gamma[pIdx++] = cModels[n]->gamma;
-      #endif
       }
     }
 

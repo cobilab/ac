@@ -13,7 +13,6 @@
 
 #define ESTIMATE
 #define PROGRESS
-#define RUN_SUBS
 
 typedef uint64_t ULL;
 typedef uint64_t U64;
