@@ -413,7 +413,7 @@ ModelPar ArgsUniqModel(char *str, uint8_t type)
       }
     Mp.ctx   = ctx;
     Mp.den   = den;
-    Mp.gamma = gamma;
+    Mp.gamma = ((int)(gamma * 65536)) / 65536.0;
     Mp.edits = edits;
     Mp.eDen  = eDen;
     Mp.type  = type;
