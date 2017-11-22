@@ -10,7 +10,8 @@
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-CModel *CreateCModel(U32 ctx, U32 aDen, U8 ref, U32 edits, U32 eDen, U32 nSym){
+CModel *CreateCModel(U32 ctx, U32 aDen, U8 ref, U32 edits, U32 eDen, U32 nSym,
+double gamma){
   CModel *M = (CModel *) Calloc(1, sizeof(CModel));
   U64    prod = 1, *mult;
   U32    n;

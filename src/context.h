@@ -32,6 +32,7 @@ typedef struct{
   U32        mode;
   HASH       *HT;
   ARRAY      *AT;
+  double     gamma;
   U64        pModelIdx;     // IDX
   U32        edits;         // EDITS
   U32        nSym;          // EDITS
@@ -49,7 +50,7 @@ uint64_t        GetPModelIdxCorr     (U8 *, CModel *, uint64_t);
 void            CorrectCModelSUBS    (CModel *, PModel *, uint8_t);
 void            ResetCModelIdx       (CModel *);
 void            UpdateCModelCounter  (CModel *, U32, U64);
-CModel          *CreateCModel        (U32, U32, U8, U32, U32, U32);
+CModel          *CreateCModel        (U32, U32, U8, U32, U32, U32, double);
 void            ComputePModel        (CModel *, PModel *, uint64_t, uint32_t);
 void            RemoveCModel         (CModel *);
 

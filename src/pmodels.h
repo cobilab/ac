@@ -7,8 +7,8 @@
 #define DEFAULT_GAMMA  0.90
 
 typedef struct{
-  U32       *freqs;
-  U32       sum;
+  uint32_t  *freqs;
+  uint32_t  sum;
   }
 PModel;
 
@@ -20,14 +20,15 @@ FloatPModel;
 typedef struct{
   uint32_t  totModels;
   double    *weight;
+  double    *gamma;
   double    totalWeight;
   }
 CMWeight;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-PModel      *CreatePModel        (U32);
-FloatPModel *CreateFloatPModel   (U32);
+PModel      *CreatePModel        (uint32_t);
+FloatPModel *CreateFloatPModel   (uint32_t);
 void        RemovePModel         (PModel *);
 void        RemoveFPModel        (FloatPModel *);
 void        ComputeMXProbs       (FloatPModel *, PModel *, uint32_t);
@@ -35,7 +36,7 @@ void        ComputeWeightedFreqs (double, PModel *, FloatPModel *, uint32_t);
 CMWeight    *CreateWeightModel   (uint32_t);
 void        ResetWeightModel     (CMWeight *);
 void        RenormalizeWeights   (CMWeight *);
-void        CalcDecayment        (CMWeight *, PModel **, uint8_t, double);
+void        CalcDecayment        (CMWeight *, PModel **, uint8_t);
 void        RemoveWeightModel    (CMWeight *);
 double      PModelSymbolNats     (PModel *, uint32_t);
 

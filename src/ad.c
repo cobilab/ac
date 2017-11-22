@@ -125,7 +125,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
         cModels[n]->SUBS.seq->buf[cModels[n]->SUBS.seq->idx] = sym;
         }         
 
-    CalcDecayment(WM, pModel, sym, P->gamma);
+    CalcDecayment(WM, pModel, sym);
 
     for(n = 0 ; n < P[id].nModels ; ++n){
       if(P[id].model[n].type == TARGET)

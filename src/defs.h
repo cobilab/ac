@@ -26,11 +26,12 @@ typedef int16_t  I16;
 typedef int8_t   I8;
 
 typedef struct{
-  U32 ctx;
-  U32 den;
-  U32 edits;
-  U32 eDen;
-  U8  type;
+  U32    ctx;
+  U32    den;
+  double gamma;
+  U32    edits;
+  U32    eDen;
+  U8     type;
   }
 ModelPar;
 
@@ -47,7 +48,6 @@ typedef struct{
   U64      checksum;
   U64      size;
   U32      watermark;
-  double   gamma;
   U32      nModels;
   U32      low;
   }

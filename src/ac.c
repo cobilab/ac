@@ -81,7 +81,7 @@ refNModels, INF *I){
   for(n = 0 ; n < P->nModels ; ++n){
     if(P->model[n].type == TARGET){
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, TARGET, 
-      P->model[n].edits, P->model[n].eDen, AL->cardinality);
+      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
       }
     }
 
@@ -112,11 +112,11 @@ refNModels, INF *I){
   WriteNBits(AL->cardinality,          16, Writter);
   for(x = 0 ; x < AL->cardinality ; ++x)
     WriteNBits(AL->toChars[x],          8, Writter);
-  WriteNBits((int) (P->gamma * 65536), 32, Writter);
   WriteNBits(P->nModels,               16, Writter);
   for(n = 0 ; n < P->nModels ; ++n){
     WriteNBits(cModels[n]->ctx,         5, Writter);
     WriteNBits(cModels[n]->alphaDen,   11, Writter);
+    WriteNBits(cModels[n]->gamma * 65536, 32, Writter);
     WriteNBits(cModels[n]->edits,       7, Writter);
     WriteNBits(cModels[n]->SUBS.eDen,   9, Writter);
     WriteNBits(P->model[n].type,        1, Writter);
@@ -159,7 +159,7 @@ refNModels, INF *I){
         fprintf(IAE, "%.3g\n", PModelSymbolNats(MX, sym) / M_LN2);
       #endif
 
-      CalcDecayment(WM, pModel, sym, P->gamma);
+      CalcDecayment(WM, pModel, sym);
 
       for(n = 0 ; n < P->nModels ; ++n)
         if(cModels[n]->ref == TARGET)
@@ -247,7 +247,7 @@ CModel **LoadReference(Parameters *P){
   for(n = 0 ; n < P->nModels ; ++n)
     if(P->model[n].type == REFERENCE)
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, REFERENCE, 
-      P->model[n].edits, P->model[n].eDen, AL->cardinality);
+      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
 
   nSymbols = NBytesInFile(Reader);
 
@@ -300,7 +300,7 @@ int32_t main(int argc, char *argv[]){
   uint32_t    n, k, refNModels;
   uint64_t    totalBytes, headerBytes, totalSize;
   clock_t     stop = 0, start = clock();
-  double      gamma;
+//  double      gamma;
   
   Parameters  *P;
   INF         *I;
@@ -374,13 +374,15 @@ int32_t main(int argc, char *argv[]){
         P->model[k++] = ArgsUniqModel(xargv[n+1], 0);
     }
 
+/*
   gamma = DEFAULT_GAMMA;
   for(n = 1 ; n < xargc ; ++n) 
     if(strcmp(xargv[n], "-g") == 0) 
       gamma = atof(xargv[n+1]);
+*/
 
-  P->gamma    = ArgsDouble (gamma, p, argc, "-g");
-  P->gamma    = ((int)(P->gamma * 65536)) / 65536.0;
+//P->gamma    = ArgsDouble (gamma, p, argc, "-g");
+//P->gamma    = ((int)(P->gamma * 65536)) / 65536.0;
   P->ref      = ArgsString (NULL, p, argc, "-r");
   P->nTar     = ReadFNames (P, argv[argc-1]);
   P->checksum = 0;
