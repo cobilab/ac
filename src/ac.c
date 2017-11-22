@@ -66,6 +66,9 @@ refNModels, INF *I){
       totModels++;
       }
 
+  for(n = 0 ; n < P->nModels ; ++n)
+    fprintf(stderr, "xGM: %lf\n", P->model[n].gamma);
+
   fprintf(stderr, "Using %u probabilistic models\n", totModels);
 
   pModel        = (PModel  **) Calloc(totModels, sizeof(PModel *));
