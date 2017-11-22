@@ -22,7 +22,7 @@ double gamma){
   M->ctx         = ctx;
   M->alphaDen    = aDen;
   M->edits       = edits;
-  M->gamma       = (int)(gamma * 65536) / 65536.0;
+  M->gamma       = gamma;
   M->pModelIdx   = 0;
   M->ref         = ref == 0 ? 0 : 1;
 
