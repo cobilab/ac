@@ -103,8 +103,7 @@ void ComputeWeightedFreqs(double w, PModel *P, FloatPModel *PT, uint32_t nSym){
   uint32_t x;
   double f = w / P->sum;
   for(x = 0 ; x < nSym ; ++x)
-    //PT->freqs[x] += (double) P->freqs[x] * f;
-    PT->freqs[x] += (double) P->freqs[x] / P->sum * w;
+    PT->freqs[x] += (double) P->freqs[x] * f;
   }
 
 
