@@ -114,7 +114,7 @@ refNModels, INF *I){
   for(n = 0 ; n < P->nModels ; ++n){
     WriteNBits(cModels[n]->ctx,         5, Writter);
     WriteNBits(cModels[n]->alphaDen,   11, Writter);
-    WriteNBits((int) (cModels[n]->gamma * 65536), 32, Writter);
+    WriteNBits(cModels[n]->gamma,      32, Writter);
     WriteNBits(cModels[n]->edits,       7, Writter);
     WriteNBits(cModels[n]->SUBS.eDen,   9, Writter);
     WriteNBits(P->model[n].type,        1, Writter);
@@ -125,9 +125,9 @@ refNModels, INF *I){
   // GIVE SPECIFIC GAMMA:
   int pIdx = 0;
   for(n = 0 ; n < P->nModels ; ++n){
-    WM->gamma[pIdx++] = cModels[n]->gamma;
+    WM->gamma[pIdx++] = cModels[n]->gamma / 65536.0;
     if(P->model[n].edits != 0){
-      WM->gamma[pIdx++] = cModels[n]->gamma;
+      WM->gamma[pIdx++] = cModels[n]->gamma / 65536.0;
       }
     }
 

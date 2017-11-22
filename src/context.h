@@ -32,7 +32,7 @@ typedef struct{
   U32        mode;
   HASH       *HT;
   ARRAY      *AT;
-  double     gamma;
+  int        gamma;
   U64        pModelIdx;     // IDX
   U32        edits;         // EDITS
   U32        nSym;          // EDITS
