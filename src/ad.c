@@ -56,11 +56,11 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
     AL->toChars[x]       = ReadNBits( 8, Reader);
     AL->revMap[(uint8_t) AL->toChars[x]] = x;
     }
-  P[id].gamma            = ReadNBits(32, Reader) / 65536.0;
   P[id].nModels          = ReadNBits(16, Reader);
   for(k = 0 ; k < P[id].nModels ; ++k){
     P[id].model[k].ctx   = ReadNBits( 5, Reader);
     P[id].model[k].den   = ReadNBits(11, Reader);
+    P[id].model[k].gamma = ReadNBits(32, Reader) / 65536.0;
     P[id].model[k].edits = ReadNBits( 7, Reader);
     P[id].model[k].eDen  = ReadNBits( 9, Reader);
     P[id].model[k].type  = ReadNBits( 1, Reader);
@@ -86,8 +86,19 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   for(n = 0 ; n < P[id].nModels ; ++n){
     if(P[id].model[n].type == TARGET)
       cModels[n] = CreateCModel(P[id].model[n].ctx , P[id].model[n].den, 
-      TARGET, P[id].model[n].edits, P[id].model[n].eDen, AL->cardinality);
+      TARGET, P[id].model[n].edits, P[id].model[n].eDen, AL->cardinality,
+      P[id].model[n].gamma);
     }
+
+  // GIVE SPECIFIC GAMMA:
+  int pIdx = 0;
+  for(n = 0 ; n < P[id].nModels ; ++n){
+    WM->gamma[pIdx++] = cModels[n]->gamma;
+    if(P[id].model[n].edits != 0){
+      WM->gamma[pIdx++] = cModels[n]->gamma;
+      }
+    }
+
 
   i = 0;
   while(nSymbols--){
@@ -209,7 +220,7 @@ CModel **LoadReference(Parameters *P){
   for(n = 0 ; n < P->nModels ; ++n)
     if(P->model[n].type == REFERENCE)
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, REFERENCE,
-      P->model[n].edits, P->model[n].eDen, AL->cardinality);
+      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
 
   nSymbols = NBytesInFile(Reader);
 
@@ -310,12 +321,12 @@ int32_t main(int argc, char *argv[]){
     cardinality    = ReadNBits(16, Reader);
     for(k = 0 ; k < cardinality ; ++k)
       garbage      = ReadNBits(8,  Reader);
-    P[n].gamma     = ReadNBits(32, Reader) / 65536.0;
     P[n].nModels   = ReadNBits(16, Reader);
     P[n].model     = (ModelPar *) Calloc(P[n].nModels, sizeof(ModelPar));
     for(k = 0 ; k < P[n].nModels ; ++k){
       P[n].model[k].ctx   = ReadNBits( 5, Reader); 
       P[n].model[k].den   = ReadNBits(11, Reader); 
+      P[n].model[k].gamma = ReadNBits(32, Reader) / 65536.0; 
       P[n].model[k].edits = ReadNBits( 7, Reader); 
       P[n].model[k].eDen  = ReadNBits( 9, Reader); 
       P[n].model[k].type  = ReadNBits( 1, Reader);

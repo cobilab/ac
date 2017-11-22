@@ -122,14 +122,12 @@ refNModels, INF *I){
 
   I[id].header = _bytes_output;
 
-  // GIVE GAMMA:
+  // GIVE SPECIFIC GAMMA:
   int pIdx = 0;
   for(n = 0 ; n < P->nModels ; ++n){
     WM->gamma[pIdx++] = cModels[n]->gamma;
-    fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx-1]);
     if(P->model[n].edits != 0){
       WM->gamma[pIdx++] = cModels[n]->gamma;
-      fprintf(stderr, "Gamma: %lf\n", WM->gamma[pIdx-1]);
       }
     }
 
