@@ -4,19 +4,21 @@
 
 void ModelsExplanation(void){
   fprintf(stderr,
-  "                                                                         \n"
-  "  -rm <c>:<d>:<g>:<m/e>  reference context model (ex:-rm 1:1:0.9:0/0),   \n"
-  "  -rm <c>:<d>:<g>:<m/e>  reference context model (ex:-rm 5:20:0.9:1/50), \n"
-  "  ...                                                                    \n"
-  "  -tm <c>:<d>:<g>:<m/e>  target context model (ex:-tm 1:1:0.9:0/0),      \n"
-  "  -tm <c>:<d>:<g>:<m/e>  target context model (ex:-tm 6:100:0.8:2/10),   \n"
-  "  ...                                                                    \n"
-  "                         target and reference templates use <c> for      \n"
-  "                         context-order size, <d> for alpha (1/<d>), <g>  \n"
-  "                         for gamma (decayment forgetting factor) [0;1),  \n"
-  "                         <m> to the maximum sets the allowed mutations,  \n"
-  "                         on the context without being discarded (for     \n"
-  "                         deep contexts), under the estimator <e>,       \n");
+  "                                                                       \n"
+  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (ex:-rm 1:1:0.9:0/0),   \n"
+  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (ex:-rm 5:20:0.9:1/50), \n"
+  "  ...                                                                  \n"
+  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (ex:-tm 1:1:0.9:0/0),      \n"
+  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (ex:-tm 6:100:0.8:2/10),   \n"
+  "  ...                                                                  \n"
+  "                         target and reference templates use <c> for    \n"
+  "                         context-order size, <d> for alpha (1/<d>), <g>\n"
+  "                         for gamma (decayment forgetting factor) [0;1),\n"
+  "                         <m> to the maximum sets the allowed mutations,\n"
+  "                         on the context without being discarded (for   \n"
+  "                         deep contexts), under the estimator <e>, using\n"
+  "                         <a> for gamma (decayment forgetting factor)   \n"
+  "                         [0;1) (tolerant model),                       \n");
   } 
 
 void PrintMenuD(void){
@@ -70,8 +72,8 @@ void PrintMenu(void){
   "                                                                       \n"
   "Example:                                                               \n"
   "                                                                       \n"
-  "  [x] Compression:   ./AC -v -tm 1:1:0.8:0/0 -tm 5:100:0.9:3/20 seq.txt\n"
-  "  [x] Decompression: ./AD -v seq.txt.co                                \n"
+  "  [Compress]   ./AC -v -tm 1:1:0.8/0:0:0 -tm 5:20:0.9/3:20:0.9 seq.txt \n"
+  "  [Decompress] ./AD -v seq.txt.co                                      \n"
   "                                                                       \n"
   "Report bugs to <pratas@ua.pt>.                                         \n");
   }

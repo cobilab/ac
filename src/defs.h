@@ -28,6 +28,7 @@ typedef struct{
   U32    ctx;
   U32    den;
   double gamma;
+  double eGamma;
   U32    edits;
   U32    eDen;
   U8     type;

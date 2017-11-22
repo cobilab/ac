@@ -11,7 +11,7 @@
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 CModel *CreateCModel(U32 ctx, U32 aDen, U8 ref, U32 edits, U32 eDen, U32 nSym,
-double gamma){
+double gamma, double eGamma){
   CModel *M = (CModel *) Calloc(1, sizeof(CModel));
   U64    prod = 1, *mult;
   U32    n;
@@ -23,6 +23,7 @@ double gamma){
   M->alphaDen    = aDen;
   M->edits       = edits;
   M->gamma       = gamma;
+  M->eGamma      = eGamma;
   M->pModelIdx   = 0;
   M->ref         = ref == 0 ? 0 : 1;
 

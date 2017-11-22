@@ -399,24 +399,27 @@ char *ArgsString(char *def, char *arg[], uint32_t n, char *str)
 ModelPar ArgsUniqModel(char *str, uint8_t type)
   {
   uint32_t  ctx, den, edits, eDen;
-  double    gamma;
+  double    gamma, eGamma;
   ModelPar  Mp;
 
-  if(sscanf(str, "%u:%u:%lf:%u/%u", &ctx, &den, &gamma, &edits, &eDen ) == 5){
+  if(sscanf(str, "%u:%u:%lf/%u:%u:%lf", &ctx, &den, &gamma, &edits, &eDen, 
+  &eGamma ) == 6){
     if(ctx > MAX_CTX || ctx < MIN_CTX || den > MAX_DEN || den < MIN_DEN || 
-    gamma >= 1.0 || gamma <= 0.0 ||edits > 256 || eDen > 50000){
+    gamma >= 1.0 || gamma < 0.0 || eGamma >= 1.0 || eGamma < 0.0 ||edits > 256 
+    || eDen > 50000){
       fprintf(stderr, "Error: invalid model arguments range!\n");
       ModelsExplanation();
       fprintf(stderr, "\nPlease reset the models according to the above " 
       "description.\n");
       exit(1);
       }
-    Mp.ctx   = ctx;
-    Mp.den   = den;
-    Mp.gamma = ((int)(gamma * 65536)) / 65536.0;
-    Mp.edits = edits;
-    Mp.eDen  = eDen;
-    Mp.type  = type;
+    Mp.ctx    = ctx;
+    Mp.den    = den;
+    Mp.gamma  = ((int)(gamma * 65536)) / 65536.0;
+    Mp.eGamma = ((int)(eGamma * 65536)) / 65536.0;
+    Mp.edits  = edits;
+    Mp.eDen   = eDen;
+    Mp.type   = type;
     return Mp;
     }
   else{
@@ -552,9 +555,12 @@ void PrintArgs(Parameters *P)
       P->model[n].gamma);
       fprintf(stderr, "  [+] Allowable substitutions ...... %u\n",
       P->model[n].edits);
-      if(P->model[n].edits != 0)
+      if(P->model[n].edits != 0){
         fprintf(stderr, "  [+] Substitutions alpha den ...... %u\n",
         P->model[n].eDen);
+        fprintf(stderr, "  [+] Substitutions gamma .......... %.2lf\n",
+        P->model[n].eGamma);
+        }
     }
 
   for(n = 0 ; n < P->nModels ; ++n)
@@ -569,9 +575,13 @@ void PrintArgs(Parameters *P)
       P->model[n].gamma);
       fprintf(stderr, "  [+] Allowable substitutions ...... %u\n",
       P->model[n].edits);
-      if(P->model[n].edits != 0)
+      if(P->model[n].edits != 0){
         fprintf(stderr, "  [+] Substitutions alpha den ...... %u\n",
         P->model[n].eDen);
+        fprintf(stderr, "  [+] Substitutions gamma .......... %.2lf\n",
+        P->model[n].eGamma);
+
+        }
       }
 
   if(P->ref != NULL)

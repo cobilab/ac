@@ -79,7 +79,8 @@ refNModels, INF *I){
   for(n = 0 ; n < P->nModels ; ++n){
     if(P->model[n].type == TARGET){
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, TARGET, 
-      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
+      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma,
+      P->model[n].eGamma);
       }
     }
 
@@ -115,6 +116,7 @@ refNModels, INF *I){
     WriteNBits(cModels[n]->ctx,         5, Writter);
     WriteNBits(cModels[n]->alphaDen,   11, Writter);
     WriteNBits((int)(cModels[n]->gamma * 65536), 17, Writter);
+    WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter); //TODO: only on edits!
     WriteNBits(cModels[n]->edits,       7, Writter);
     WriteNBits(cModels[n]->SUBS.eDen,   9, Writter);
     WriteNBits(P->model[n].type,        1, Writter);
@@ -127,7 +129,7 @@ refNModels, INF *I){
   for(n = 0 ; n < P->nModels ; ++n){
     WM->gamma[pIdx++] = cModels[n]->gamma;
     if(P->model[n].edits != 0){
-      WM->gamma[pIdx++] = cModels[n]->gamma;
+      WM->gamma[pIdx++] = cModels[n]->eGamma;
       }
     }
 
@@ -254,7 +256,8 @@ CModel **LoadReference(Parameters *P){
   for(n = 0 ; n < P->nModels ; ++n)
     if(P->model[n].type == REFERENCE)
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, REFERENCE, 
-      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma);
+      P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma,
+      P->model[n].eGamma);
 
   nSymbols = NBytesInFile(Reader);
 
@@ -381,15 +384,6 @@ int32_t main(int argc, char *argv[]){
         P->model[k++] = ArgsUniqModel(xargv[n+1], 0);
     }
 
-/*
-  gamma = DEFAULT_GAMMA;
-  for(n = 1 ; n < xargc ; ++n) 
-    if(strcmp(xargv[n], "-g") == 0) 
-      gamma = atof(xargv[n+1]);
-*/
-
-//P->gamma    = ArgsDouble (gamma, p, argc, "-g");
-//P->gamma    = ((int)(P->gamma * 65536)) / 65536.0;
   P->ref      = ArgsString (NULL, p, argc, "-r");
   P->nTar     = ReadFNames (P, argv[argc-1]);
   P->checksum = 0;
