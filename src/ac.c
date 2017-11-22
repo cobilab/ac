@@ -124,6 +124,19 @@ refNModels, INF *I){
 
   I[id].header = _bytes_output;
 
+  // GIVE GAMMA:
+  cModels[n]->gamma;
+
+  int pIdx = 0;
+  for(n = 0 ; n < P->nModels ; ++n){
+    WM->gamma[pIdx++] = cModels[n]->gamma;
+    if(P->model[n].edits != 0){
+      #ifdef RUN_SUBS
+      WM->gamma[pIdx++] = cModels[n]->gamma;
+      #endif
+      }
+    }
+
   i = 0;
   while((k = fread(readerBuffer, 1, BUFFER_SIZE, Reader)))
     for(idxPos = 0 ; idxPos < k ; ++idxPos){
