@@ -81,10 +81,8 @@ U32 garbage;
 #define MIN_DEN                1
 #define BGUARD                 32
 #define DEFAULT_MAX_COUNT      ((1 << (sizeof(ACC) * 8)) - 1)
-#define MX_PMODEL              65535
 #define CHECKSUMGF             1073741824
 #define WATERMARK              16042014
-#define DEFAULT_GAMMA          0.90
 #define MAX_HISTORYSIZE        1000000
 #define REFERENCE              1
 #define TARGET                 0
