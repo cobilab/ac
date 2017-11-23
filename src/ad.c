@@ -11,6 +11,8 @@
 #include "buffer.h"
 #include "alphabet.h"
 #include "common.h"
+#include "pmodels.h"
+#include "tolerant.h"
 #include "context.h"
 #include "bitio.h"
 #include "arith.h"
@@ -109,6 +111,20 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
     n = 0;
     pos = &symBuf->buf[symBuf->idx-1];
     for(cModel = 0 ; cModel < P[id].nModels ; ++cModel){
+      CModel *CM = cModels[cModel];
+      GetPModelIdx(pos, CM);
+      ComputePModel(CM, pModel[n], CM->pModelIdx, CM->alphaDen);
+      ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
+      if(CM->edits != 0){
+        ++n;
+//        CM->TM->seq->buf[CM->TM->seq->idx] = sym;
+        CM->TM->idx = GetPModelIdxCorr(CM->TM->seq->buf+
+        CM->TM->seq->idx-1, CM, CM->TM->idx);
+        ComputePModel(CM, pModel[n], CM->TM->idx, CM->TM->den);
+        ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
+        }
+      ++n;
+/*
       GetPModelIdx(pos, cModels[cModel]);
       ComputePModel(cModels[cModel], pModel[n], cModels[cModel]->pModelIdx,
       cModels[cModel]->alphaDen);
@@ -123,6 +139,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
         ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, AL->cardinality);
         }
       ++n;
+*/
       }
 
     ComputeMXProbs(PT, MX, AL->cardinality);
@@ -133,22 +150,22 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
 
     for(n = 0 ; n < P[id].nModels ; ++n)
       if(cModels[n]->edits != 0){
-        cModels[n]->SUBS.seq->buf[cModels[n]->SUBS.seq->idx] = sym;
+        cModels[n]->TM->seq->buf[cModels[n]->TM->seq->idx] = sym;
         }         
 
     CalcDecayment(WM, pModel, sym);
 
-    for(n = 0 ; n < P[id].nModels ; ++n){
+    for(n = 0 ; n < P[id].nModels ; ++n)
       if(P[id].model[n].type == TARGET)
         UpdateCModelCounter(cModels[n], sym, cModels[n]->pModelIdx);
-      }
 
     RenormalizeWeights(WM);
 
     n = 0;
     for(cModel = 0 ; cModel < P[id].nModels ; ++cModel){
       if(cModels[cModel]->edits != 0){      // CORRECT CMODEL CONTEXTS
-        CorrectCModelSUBS(cModels[cModel], pModel[++n], sym);
+        //CorrectCModelSUBS(cModels[cModel], pModel[++n], sym);
+        UpdateTolerantModel(cModels[cModel]->TM, pModel[++n], sym);
         }
       ++n;
       }

@@ -13,6 +13,7 @@
 #include "levels.h"
 #include "common.h"
 #include "pmodels.h"
+#include "tolerant.h"
 #include "context.h"
 #include "bitio.h"
 #include "arith.h"
@@ -118,7 +119,7 @@ refNModels, INF *I){
     WriteNBits((int)(cModels[n]->gamma * 65536), 17, Writter);
     WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter); //TODO: only on edits!
     WriteNBits(cModels[n]->edits,       7, Writter);
-    WriteNBits(cModels[n]->SUBS.eDen,   9, Writter);
+    WriteNBits(cModels[n]->TM->den,     9, Writter);
     WriteNBits(P->model[n].type,        1, Writter);
     }
 
@@ -151,10 +152,10 @@ refNModels, INF *I){
         ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
         if(CM->edits != 0){
           ++n;
-          CM->SUBS.seq->buf[CM->SUBS.seq->idx] = sym;
-          CM->SUBS.idx = GetPModelIdxCorr(CM->SUBS.seq->buf+
-          CM->SUBS.seq->idx-1, CM, CM->SUBS.idx);
-          ComputePModel(CM, pModel[n], CM->SUBS.idx, CM->SUBS.eDen);
+          CM->TM->seq->buf[CM->TM->seq->idx] = sym;
+          CM->TM->idx = GetPModelIdxCorr(CM->TM->seq->buf+
+          CM->TM->seq->idx-1, CM, CM->TM->idx);
+          ComputePModel(CM, pModel[n], CM->TM->idx, CM->TM->den);
           ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
           }
         ++n;
@@ -179,7 +180,7 @@ refNModels, INF *I){
       n = 0;
       for(cModel = 0 ; cModel < P->nModels ; ++cModel){
         if(cModels[cModel]->edits != 0)
-          CorrectCModelSUBS(cModels[cModel], pModel[++n], sym);
+          UpdateTolerantModel(cModels[cModel]->TM, pModel[++n], sym);
         ++n;
         }
 
@@ -310,7 +311,6 @@ int32_t main(int argc, char *argv[]){
   uint32_t    n, k, refNModels;
   uint64_t    totalBytes, headerBytes, totalSize;
   clock_t     stop = 0, start = clock();
-//  double      gamma;
   
   Parameters  *P;
   INF         *I;
@@ -425,7 +425,6 @@ int32_t main(int argc, char *argv[]){
       fprintf(stdout, ") , Normalized Dissimilarity Rate: %.6g\n", 
       (8.0*I[n].bytes)/(log2(cardinality)*I[n].size));
       }
-
 
   fprintf(stdout, "Total bytes: %"PRIu64" (", totalBytes);
   PrintHRBytes(totalBytes);

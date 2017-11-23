@@ -28,12 +28,12 @@ double gamma, double eGamma){
   M->ref         = ref == 0 ? 0 : 1;
 
   if((ULL)(M->nPModels) * M->nSym * sizeof(ACC) >> 20 > MAX_ARRAY_MEMORY){
-    M->mode     = HASH_TABLE_MODE;
-    M->HT       = CreateHashTable(M->nSym);
+    M->mode = HASH_TABLE_MODE;
+    M->HT   = CreateHashTable(M->nSym);
     }
   else{
-    M->mode     = ARRAY_MODE;
-    M->AT       = CreateArrayTable(M->nSym, M->nPModels);
+    M->mode = ARRAY_MODE;
+    M->AT   = CreateArrayTable(M->nSym, M->nPModels);
     }
 
   for(n = 0 ; n < M->ctx ; ++n){
@@ -44,33 +44,11 @@ double gamma, double eGamma){
   M->multiplier = mult[M->ctx-1];
 
   if(edits != 0){
-    M->SUBS.seq       = CreateCBuffer(BUFFER_SIZE, BGUARD);
-    M->SUBS.in        = 0;
-    M->SUBS.idx       = 0;
-    M->SUBS.mask      = (uint8_t *) Calloc(BGUARD, sizeof(uint8_t));
-    M->SUBS.threshold = edits;
-    M->SUBS.eDen      = eDen;
+    M->TM = CreateTolerantModel(edits, eDen, M->ctx, nSym);
     }
 
   Free(mult);
   return M;
-  }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-int32_t BestId(uint32_t *f, uint32_t sum, uint32_t nSym){
-  if(sum == nSym) return -2; // ZERO COUNTERS
-
-  uint32_t x, best = 0, max = f[0];
-  for(x = 1 ; x < nSym ; ++x)
-    if(f[x] > max){
-      max = f[x];
-      best = x;
-      }
-
-  for(x = 0 ; x < nSym ; ++x) if(best != x && max == f[x]) return -1;
-
-  return best;
   }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,54 +69,6 @@ uint64_t GetPModelIdxCorr(U8 *p, CModel *M, uint64_t idx){
   return (((idx-*(p-M->ctx)*M->multiplier)*M->nSym)+*p);
   }
  
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-void FailSUBS(CModel *M){
-  uint32_t x, fails = 0;
-  for(x = 0 ; x < M->ctx ; ++x)
-    if(M->SUBS.mask[x] != 0)
-      ++fails;
-  if(fails <= M->SUBS.threshold)
-    ShiftBuffer(M->SUBS.mask, M->ctx, 1);
-  else 
-    M->SUBS.in = 0;
-  }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-void HitSUBS(CModel *M){
-  ShiftBuffer(M->SUBS.mask, M->ctx, 0);
-  }
-
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-void CorrectCModelSUBS(CModel *M, PModel *P, uint8_t sym){
-  int32_t best = BestId(P->freqs, P->sum, M->nSym);
-  switch(best){
-    case -2:  // IT IS A ZERO COUNTER [NOT SEEN BEFORE]
-      if(M->SUBS.in != 0)
-        HitSUBS(M); // HIT WORKS BETTER WITH AMINO ACIDS
-    break;
-    case -1:  // IT HAS AT LEAST TWO MAXIMUM FREQS [CONFUSION FREQS]
-      if(M->SUBS.in != 0)
-        FailSUBS(M);
-    break;
-    default:  // IT HAS ONE MAXIMUM FREQ
-      if(M->SUBS.in == 0){ // IF IS OUT
-        M->SUBS.in = 1;
-        memset(M->SUBS.mask, 0, M->ctx);
-        }
-      else{ // IF IS IN
-        if(best == sym) HitSUBS(M);
-        else{
-          FailSUBS(M);
-          M->SUBS.seq->buf[M->SUBS.seq->idx] = best; 
-          } // UPDATE BUFFER WITH NEW SYMBOL
-        }
-    }
-  UpdateCBuffer(M->SUBS.seq);
-  }
-
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 void ComputePModel(CModel *M, PModel *P, uint64_t idx, uint32_t aDen){
@@ -186,7 +116,7 @@ void RemoveCModel(CModel *M){
   if(M->mode == HASH_TABLE_MODE) RemoveHashTable (M->HT);
   else                           RemoveArrayTable(M->AT);
 
-  //if(M->edits > 0)               RemoveTolerantModel(M->TM);
+  if(M->edits > 0)               RemoveTolerantModel(M->TM);
   Free(M);
   }
 
