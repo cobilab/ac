@@ -63,9 +63,11 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
     P[id].model[k].ctx   = ReadNBits( 5, Reader);
     P[id].model[k].den   = ReadNBits(11, Reader);
     P[id].model[k].gamma = ReadNBits(17, Reader) / 65536.0;
-    P[id].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
     P[id].model[k].edits = ReadNBits( 7, Reader);
-    P[id].model[k].eDen  = ReadNBits( 9, Reader);
+    if(P[id].model[k].edits != 0){
+      P[id].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
+      P[id].model[k].eDen   = ReadNBits( 9, Reader);
+      }
     P[id].model[k].type  = ReadNBits( 1, Reader);
     }
 
@@ -347,7 +349,10 @@ int32_t main(int argc, char *argv[]){
       P[n].model[k].gamma = ReadNBits(17, Reader) / 65536.0; 
       P[n].model[k].eGamma = ReadNBits(17, Reader) / 65536.0; 
       P[n].model[k].edits = ReadNBits( 7, Reader); 
-      P[n].model[k].eDen  = ReadNBits( 9, Reader); 
+      if(P[n].model[k].edits != 0){
+        P[n].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
+        P[n].model[k].eDen   = ReadNBits( 9, Reader);
+        }
       P[n].model[k].type  = ReadNBits( 1, Reader);
       if(P[n].model[k].type == 1)
         ++refNModels;

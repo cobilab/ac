@@ -117,9 +117,11 @@ refNModels, INF *I){
     WriteNBits(cModels[n]->ctx,         5, Writter);
     WriteNBits(cModels[n]->alphaDen,   11, Writter);
     WriteNBits((int)(cModels[n]->gamma * 65536), 17, Writter);
-    WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter); //TODO: only on edits!
     WriteNBits(cModels[n]->edits,       7, Writter);
-    WriteNBits(cModels[n]->TM->den,     9, Writter);
+    if(cModels[n]->edits != 0){
+      WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter);
+      WriteNBits(cModels[n]->TM->den,     9, Writter);
+      }
     WriteNBits(P->model[n].type,        1, Writter);
     }
 
