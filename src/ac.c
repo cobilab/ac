@@ -429,7 +429,7 @@ int32_t main(int argc, char *argv[]){
 
   fprintf(stdout, "Total bytes: %"PRIu64" (", totalBytes);
   PrintHRBytes(totalBytes);
-  fprintf(stdout, "), %.4g bpb, %.4g bps w/ no header, Normalized Dissimilarity" 
+  fprintf(stdout, "), %.5g bpa, %.5g bpa w/ no header, Normalized Dissimilarity" 
   " Rate: %.6g\n", ((8.0*totalBytes)/totalSize), ((8.0*(totalBytes-headerBytes))
   /totalSize), (8.0*totalBytes)/(log2(cardinality)*totalSize));  
   stop = clock();
