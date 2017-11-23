@@ -347,7 +347,6 @@ int32_t main(int argc, char *argv[]){
       P[n].model[k].ctx   = ReadNBits( 5, Reader); 
       P[n].model[k].den   = ReadNBits(11, Reader); 
       P[n].model[k].gamma = ReadNBits(17, Reader) / 65536.0; 
-      P[n].model[k].eGamma = ReadNBits(17, Reader) / 65536.0; 
       P[n].model[k].edits = ReadNBits( 7, Reader); 
       if(P[n].model[k].edits != 0){
         P[n].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
