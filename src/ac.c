@@ -193,6 +193,11 @@ refNModels, INF *I){
   doneoutputtingbits(Writter);
   fclose(Writter);
 
+  double se = 0;
+  for(x = 0 ; x < AL->cardinality ; ++x){
+    double probability = (double) AL->counts[x] / AL->length;
+    se += -(probability * Log(AL->cardinality, probability));
+    }
 
   #ifdef ESTIMATE
   if(P->estim == 1){
@@ -226,6 +231,7 @@ refNModels, INF *I){
 
   I[id].bytes = _bytes_output;
   I[id].size  = i;
+  I[id].se    = se;
   return card;
   }
 
@@ -313,6 +319,7 @@ int32_t main(int argc, char *argv[]){
   uint32_t    n, k, refNModels;
   uint64_t    totalBytes, headerBytes, totalSize;
   clock_t     stop = 0, start = clock();
+  double      se_average;
   
   Parameters  *P;
   INF         *I;
@@ -407,6 +414,7 @@ int32_t main(int argc, char *argv[]){
 
   I = (INF *) Calloc(P->nTar, sizeof(INF));
 
+  se_average  = 0;
   totalSize   = 0;
   totalBytes  = 0;
   headerBytes = 0;
@@ -416,7 +424,9 @@ int32_t main(int argc, char *argv[]){
     totalSize   += I[n].size;
     totalBytes  += I[n].bytes;
     headerBytes += I[n].header;
+    se_average  += I[n].se;
     }
+  se_average /= P->nTar;
 
   if(P->nTar > 1)
     for(n = 0 ; n < P->nTar ; ++n){
@@ -425,6 +435,8 @@ int32_t main(int argc, char *argv[]){
       PrintHRBytes(I[n].bytes);
       fprintf(stdout, ") , Normalized Dissimilarity Rate: %.6g\n", 
       (8.0*I[n].bytes)/(log2(cardinality)*I[n].size));
+
+      fprintf(stdout, "Shannon entropy: %.5g\n", I[n].se);
       }
 
   fprintf(stdout, "Total bytes: %"PRIu64" (", totalBytes);
@@ -434,6 +446,8 @@ int32_t main(int argc, char *argv[]){
 
   fprintf(stdout, "Normalized Dissimilarity Rate: %.6g\n", (8.0*totalBytes)/
   (log2(cardinality)*totalSize));  
+
+  fprintf(stdout, "Average Shannon entropy: %.5g\n", se_average);
 
   stop = clock();
   fprintf(stdout, "Spent %g sec.\n", ((double)(stop-start))/CLOCKS_PER_SEC);

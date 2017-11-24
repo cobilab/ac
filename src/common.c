@@ -47,6 +47,12 @@ double Power(double a, double b)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+double Log(double x, int base){ 
+  return log(x) / log(base); 
+  } 
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 void ShiftBuffer(uint8_t *buf, int size, uint8_t new){
 //  memmove(buf, buf + 1, size * sizeof(uint8_t));
   uint32_t x;
