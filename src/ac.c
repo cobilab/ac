@@ -196,7 +196,7 @@ refNModels, INF *I){
   double se = 0;
   for(x = 0 ; x < AL->cardinality ; ++x){
     double probability = (double) AL->counts[x] / AL->length;
-    se += -(probability * Log(AL->cardinality, probability));
+    se += (-probability * Log(AL->cardinality, probability));
     }
 
   #ifdef ESTIMATE
