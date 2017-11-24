@@ -5,11 +5,11 @@
 void ModelsExplanation(void){
   fprintf(stderr,
   "                                                                       \n"
-  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (ex:-rm 1:1:0.9:0/0),   \n"
-  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (ex:-rm 5:20:0.9:1/50), \n"
+  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (-rm 1:10:0.9/0:0:0),   \n"
+  "  -rm <c>:<d>:<g>/<m>:<e>:<a>  reference model (-rm 5:90:0.9/1:50:0.8),\n"
   "  ...                                                                  \n"
-  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (ex:-tm 1:1:0.9:0/0),      \n"
-  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (ex:-tm 6:100:0.8:2/10),   \n"
+  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (-tm 1:1:0.8/0/0/0),       \n"
+  "  -tm <c>:<d>:<g>/<m>:<e>:<a>  target model (-tm 7:100:0.9/2:100.85),  \n"
   "  ...                                                                  \n"
   "                         target and reference templates use <c> for    \n"
   "                         context-order size, <d> for alpha (1/<d>), <g>\n"
