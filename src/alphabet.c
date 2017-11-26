@@ -3,6 +3,13 @@
 #include "mem.h"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Print Shannon Entropy
+//
+void PrintSE(ALPHABET *A){
+  
+  }
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // PrintID
 //
 void PrintID(ALPHABET *A, int id){
@@ -118,7 +125,7 @@ void AdaptAlphabetNonFrequent(ALPHABET *A, FILE *F){
       }
     }
 
-  fprintf(stderr, "\nLow symbols numb : %u\n", A->nLow);
+  fprintf(stderr, "Low symbols numb : %u\n", A->nLow);
   fprintf(stderr, "Low frequent sym : \n");
   for(x = 0 ; x < A->cardinality ; ++x){
     int id = (int) A->toChars[x];
