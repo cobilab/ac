@@ -193,17 +193,7 @@ refNModels, INF *I){
   doneoutputtingbits(Writter);
   fclose(Writter);
 
-  double se = 0;
-  for(x = 0 ; x < AL->cardinality ; ++x){
-    double probability = (double) AL->counts[(int) AL->toChars[x]] / AL->length;
-
-fprintf(stderr, "counts: %"PRIu64", length: %"PRIu64", prob:%.7g\n", AL->counts[AL->toChars[x]], AL->length, probability);
-
-fprintf(stderr, "log: %.7g\n", Log(AL->cardinality, probability));
-
-    se += (-probability * Log(AL->cardinality, probability));
-fprintf(stderr, "se:%.8g\n", se);
-    }
+  PrintSE(AL);
 
   #ifdef ESTIMATE
   if(P->estim == 1){

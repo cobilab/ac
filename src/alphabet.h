@@ -25,7 +25,7 @@ ALPHABET;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void       PrintSE                    (ALPHABET *);
+double     PrintSE                    (ALPHABET *);
 ALPHABET   *CreateAlphabet            (uint32_t);
 void       ResetAlphabet              (ALPHABET *);
 void       LoadAlphabet               (ALPHABET *, FILE *);
