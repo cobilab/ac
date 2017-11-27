@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "alphabet.h"
 #include "mem.h"
+#include "common.h"
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Print Shannon Entropy
@@ -16,7 +17,7 @@ A->counts[A->toChars[x]], A->length, prob);
 
 fprintf(stderr, "log: %.7g\n", Log(A->cardinality, prob));
 
-    se += (prob * Log(A->cardinality, probab));
+    se += (prob * Log(A->cardinality, prob));
 fprintf(stderr, "se:%.8g\n", se);
     }
   
