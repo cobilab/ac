@@ -32,6 +32,7 @@ refNModels, INF *I){
   uint64_t    i, size = 0;
   uint8_t     *readerBuffer, sym, irSym, *pos, type = 0, 
               header = 1, line = 0, dna = 0;
+  double      se = 0;
   PModel      **pModel, *MX;
   FloatPModel *PT;
   CBUF        *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
@@ -193,7 +194,7 @@ refNModels, INF *I){
   doneoutputtingbits(Writter);
   fclose(Writter);
 
-  PrintSE(AL);
+  se = PrintSE(AL);
 
   #ifdef ESTIMATE
   if(P->estim == 1){
