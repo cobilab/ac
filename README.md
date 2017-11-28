@@ -1,10 +1,10 @@
 <p align="center"><img src="imgs/logo.png"
-alt="OWL" width="298" border="0" /></p>
+alt="AC" width="298" border="0" /></p>
 <br>
 
 <p align="center"><b>AC: a lossless compressor for amino acid sequences.</b></p></br>
 <p align="justify">
-AC is a new lossless compressor to compress efficiently amino acid sequences (proteins). It uses a cooperation between multiple context and substitutional tolerant context models. The cooperation between models is balanced with weights that benefit the models with better performance according to a forgetting function specific for each model.
+<b>AC</b> is a new lossless compressor to compress efficiently amino acid sequences (proteins). It uses a cooperation between multiple context and substitutional tolerant context models. The cooperation between models is balanced with weights that benefit the models with better performance according to a forgetting function specific for each model.
 
 ## 1. INSTALLATION ##
 
@@ -84,17 +84,29 @@ Example:
 Report bugs to &#60{pratas,ap}@ua.pt&#62.                            
 </pre>
 
-## 3. CITATION ##
+## 3. EXAMPLE ##
+
+After AC intallation, run the following:
+<pre>
+wget http://www.data-compression.info/files/corpora/proteincorpus.zip
+unzip proteincorpus.zip
+./AC -v -l 2 hi
+./AD -v hi.co
+cmp hi hi.de
+</pre>
+It will download four amino acid sequences and compress and decompress the smallest (hi). Finally, it compares if the uncompressed is equal to the original.
+
+## 4. CITATION ##
 
 On using this tool/method, please, cite:
 
 (Coming soon)
 
-## 4. ISSUES ##
+## 5. ISSUES ##
 
 For any issue let us know at [issues link](https://github.com/pratas/ac/issues).
 
-## 5. LICENSE ##
+## 6. LICENSE ##
 
 GPL v3.
 
