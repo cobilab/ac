@@ -27,7 +27,7 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   FILE        *Writter = Fopen(name, "w");
   uint64_t    nSymbols = 0;
   uint32_t    n, k, x, cModel, totModels;
-  int32_t     idx = 0, idxOut = 0;
+  int32_t     idxOut = 0;
   uint8_t     *outBuffer, sym = 0, *pos;
   CBUF        *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
   PModel      **pModel, *MX;
@@ -219,7 +219,6 @@ CModel **LoadReference(Parameters *P){
   FILE      *Reader = Fopen(P->ref, "r");
   uint32_t  n, k, idxPos;
   uint64_t  nSymbols = 0;
-  int32_t   idx = 0;
   uint8_t   *readerBuffer, sym;
   CBUF      *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
   CModel    **cModels;
@@ -288,7 +287,7 @@ CModel **LoadReference(Parameters *P){
 int32_t main(int argc, char *argv[]){
   char        **p = *&argv;
   CModel      **refModels; 
-  uint32_t    n, k, *checksum, refNModels = 0, garbage, cardinality;
+  uint32_t    n, k, *checksum, refNModels = 0, cardinality;
   Parameters  *P;
   FILE        *Reader = NULL;
   uint8_t     help, verbose, force, nTar = 1;

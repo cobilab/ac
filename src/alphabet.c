@@ -122,7 +122,7 @@ void PrintAlphabet(ALPHABET *A){
 // ADAPT ALPHABET
 //
 void AdaptAlphabetNonFrequent(ALPHABET *A, FILE *F){
-  uint32_t x, y;
+  uint32_t x;
 
   for(x = 0 ; x < A->cardinality ; ++x){
     int id = (int) A->toChars[x];

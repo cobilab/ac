@@ -28,10 +28,8 @@ refNModels, INF *I){
   char        *name    = concatenate(P->tar[id], ".co");
   FILE        *Writter = Fopen(name, "w");
   uint32_t    n, k, x, cModel, totModels, idxPos;
-  int32_t     idx = 0;
   uint64_t    i, size = 0;
-  uint8_t     *readerBuffer, sym, irSym, *pos, type = 0, 
-              header = 1, line = 0, dna = 0;
+  uint8_t     *readerBuffer, sym, *pos;
   double      se = 0;
   PModel      **pModel, *MX;
   FloatPModel *PT;
@@ -240,7 +238,6 @@ CModel **LoadReference(Parameters *P){
   FILE      *Reader = Fopen(P->ref, "r");
   uint32_t  n, k, idxPos;
   uint64_t  nSymbols = 0;
-  int32_t   idx = 0;
   uint8_t   *readerBuffer, sym;
   CBUF      *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
   CModel    **cModels;
