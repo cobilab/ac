@@ -94,7 +94,7 @@ unzip proteincorpus.zip
 ./AD -v hi.co
 cmp hi hi.de
 </pre>
-It will download four amino acid sequences and compress and decompress the smallest (hi). Finally, it compares if the uncompressed is equal to the original.
+It will download four amino acid sequences and compress and decompress the smallest (hi). Finally, it compares if the uncompressed sequence is equal to the original.
 
 ## 4. CITATION ##
 
