@@ -22,13 +22,13 @@ double PrintSE(ALPHABET *A){
 void PrintID(ALPHABET *A, int id){
   switch(id){
     case 9:
-      fprintf(stderr, "%3d :'\\t' ( %"PRIu64" )\n", id, A->counts[id]);
+      fprintf(stderr, "  [+] %3d :'\\t' ( %"PRIu64" )\n", id, A->counts[id]);
     break;
     case 10:
-      fprintf(stderr, "%3d :'\\n' ( %"PRIu64" )\n", id, A->counts[id]);
+      fprintf(stderr, "  [+] %3d :'\\n' ( %"PRIu64" )\n", id, A->counts[id]);
     break;
     default:
-      fprintf(stderr, "%3d :'%c' ( %"PRIu64" )\n", id, id, A->counts[id]);
+      fprintf(stderr, "  [+] %3d :'%c' ( %"PRIu64" )\n", id, id, A->counts[id]);
     break;
     }
   }
