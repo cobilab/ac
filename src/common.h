@@ -19,7 +19,7 @@ void        ShiftBuffer      (uint8_t *, int, uint8_t);
 void        FillLogTable     (uint32_t, uint32_t, uint32_t);
 double      SearchLog        (uint32_t );
 double      Power            (double, double);
-double      Log              (double, int);
+double      Log              (double, double);
 uint32_t    FLog2            (uint64_t );
 char        *ReplaceSubStr   (char *, char *, char *);
 uint8_t     DNASymToNum      (uint8_t  );

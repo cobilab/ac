@@ -47,7 +47,7 @@ double Power(double a, double b)
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-double Log(double x, int base){ 
+double Log(double base, double x){ 
   return log(x) / log(base); 
   } 
 

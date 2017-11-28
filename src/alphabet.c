@@ -11,16 +11,8 @@ double PrintSE(ALPHABET *A){
   double se = 0;
   for(x = 0 ; x < A->cardinality ; ++x){
     double prob = (double) A->counts[(int) A->toChars[x]] / A->length;
-
-fprintf(stderr, "counts: %"PRIu64", length: %"PRIu64", prob:%.7g\n", 
-A->counts[A->toChars[x]], A->length, prob);
-
-fprintf(stderr, "log: %.7g\n", Log(A->cardinality, prob));
-
     se += (prob * Log(A->cardinality, prob));
-fprintf(stderr, "se:%.8g\n", se);
     }
-  
   return -se;
   }
 
