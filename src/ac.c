@@ -338,7 +338,7 @@ int32_t main(int argc, char *argv[]){
   P->force   = ArgsState  (DEFAULT_FORCE,   p, argc, "-f" );
   P->estim   = ArgsState  (0,               p, argc, "-e" );
   P->level   = ArgsNum    (0,   p, argc, "-l", MIN_LEVEL, MAX_LEVEL);
-  P->low     = ArgsNum    (200, p, argc, "-t", MIN_THRESHOLD, MAX_THRESHOLD);
+  P->low     = ArgsNum    (10,  p, argc, "-t", MIN_THRESHOLD, MAX_THRESHOLD);
 
   P->nModels = 0;
   for(n = 1 ; n < argc ; ++n)
