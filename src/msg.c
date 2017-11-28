@@ -38,7 +38,7 @@ void PrintMenuD(void){
   "  <FILE>                file to uncompress (last argument). For        \n"
   "                        more files use splitting \":\" characters.     \n"
   "                                                                       \n"
-  "Report bugs to <pratas@ua.pt>.                                         \n");
+  "Report bugs to <{pratas,ap}@ua.pt>.                                    \n");
   }
 
 void PrintMenu(void){
@@ -75,7 +75,7 @@ void PrintMenu(void){
   "  [Compress]   ./AC -v -tm 1:1:0.8/0:0:0 -tm 5:20:0.9/3:20:0.9 seq.txt \n"
   "  [Decompress] ./AD -v seq.txt.co                                      \n"
   "                                                                       \n"
-  "Report bugs to <pratas@ua.pt>.                                         \n");
+  "Report bugs to <{pratas,ap}@ua.pt>.                                    \n");
   }
 
 
