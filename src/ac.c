@@ -433,18 +433,18 @@ int32_t main(int argc, char *argv[]){
       fprintf(stdout, ") , Normalized Dissimilarity Rate: %.6g\n", 
       (8.0*I[n].bytes)/(log2(cardinality)*I[n].size));
 
-      fprintf(stdout, "Shannon entropy: %.5g\n", I[n].se);
+      fprintf(stdout, "Shannon entropy: %.6g\n", I[n].se);
       }
 
   fprintf(stdout, "Total bytes: %"PRIu64" (", totalBytes);
   PrintHRBytes(totalBytes);
-  fprintf(stdout, "), %.5g bpa, %.5g bpa w/ no header\n",
+  fprintf(stdout, "), %.5g bps, %.5g bps w/ no header\n",
   ((8.0*totalBytes)/totalSize), ((8.0*(totalBytes-headerBytes))/totalSize)); 
 
   fprintf(stdout, "Normalized Dissimilarity Rate: %.6g\n", (8.0*totalBytes)/
   (log2(cardinality)*totalSize));  
 
-  fprintf(stdout, "Average Shannon entropy: %.5g\n", se_average);
+  fprintf(stdout, "Average Shannon entropy: %.6g\n", se_average);
 
   stop = clock();
   fprintf(stdout, "Spent %g sec.\n", ((double)(stop-start))/CLOCKS_PER_SEC);
