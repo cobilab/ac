@@ -93,13 +93,13 @@ refNModels, INF *I){
   startoutputtingbits();
   start_encode();
 
-  WriteNBits(WATERMARK,                32, Writter);
-  WriteNBits(P->checksum,              46, Writter);
+  WriteNBits(WATERMARK,                 8, Writter);
+  WriteNBits(P->checksum,              16, Writter);
   WriteNBits(size,                     46, Writter);
 
   // PRE HEADER : NON FREQUENT SYMBOLS
-  WriteNBits(P->low,                   32, Writter);
-  WriteNBits(AL->nLow,                 32, Writter);
+  WriteNBits(P->low,                   16, Writter);
+  WriteNBits(AL->nLow,                  8, Writter);
   for(x = 0 ; x < AL->nLow ; ++x){
     WriteNBits(AL->lowAlpha[x],         8, Writter);
     }
@@ -108,10 +108,10 @@ refNModels, INF *I){
   //// ResetAlphabet(AL);
   // PrintAlphabet(AL);
 
-  WriteNBits(AL->cardinality,          16, Writter);
+  WriteNBits(AL->cardinality,           9, Writter);
   for(x = 0 ; x < AL->cardinality ; ++x)
     WriteNBits(AL->toChars[x],          8, Writter);
-  WriteNBits(P->nModels,               16, Writter);
+  WriteNBits(P->nModels,                9, Writter);
   for(n = 0 ; n < P->nModels ; ++n){
     WriteNBits(cModels[n]->ctx,         5, Writter);
     WriteNBits(cModels[n]->alphaDen,   11, Writter);
@@ -119,7 +119,7 @@ refNModels, INF *I){
     WriteNBits(cModels[n]->edits,       7, Writter);
     if(cModels[n]->edits != 0){
       WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter);
-      WriteNBits(cModels[n]->TM->den,     9, Writter);
+      WriteNBits(cModels[n]->TM->den,   9, Writter);
       }
     WriteNBits(P->model[n].type,        1, Writter);
     }

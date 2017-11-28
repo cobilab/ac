@@ -42,23 +42,23 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   startinputtingbits();
   start_decode(Reader);
 
-  P[id].watermark        = ReadNBits(32, Reader);
-  garbage                = ReadNBits(46, Reader);
+  P[id].watermark        = ReadNBits( 8, Reader);
+  garbage                = ReadNBits(16, Reader);
   P[id].size             = ReadNBits(46, Reader);
-  P[id].low              = ReadNBits(32, Reader);
+  P[id].low              = ReadNBits(16, Reader);
   ALPHABET *AL = CreateAlphabet(P[id].low);
   AL->length   = P[id].size;
-  AL->nLow               = ReadNBits(32, Reader);
+  AL->nLow               = ReadNBits( 8, Reader);
   for(x = 0 ; x < AL->nLow ; ++x)
     AL->lowAlpha[x]      = ReadNBits( 8, Reader);
-  AL->cardinality        = ReadNBits(16, Reader);
+  AL->cardinality        = ReadNBits( 9, Reader);
   for(x = 0 ; x < 256 ; ++x)
     AL->revMap[x] = INVALID_SYMBOL;
   for(x = 0 ; x < AL->cardinality ; ++x){
     AL->toChars[x]       = ReadNBits( 8, Reader);
     AL->revMap[(uint8_t) AL->toChars[x]] = x;
     }
-  P[id].nModels          = ReadNBits(16, Reader);
+  P[id].nModels          = ReadNBits( 9, Reader);
   for(k = 0 ; k < P[id].nModels ; ++k){
     P[id].model[k].ctx   = ReadNBits( 5, Reader);
     P[id].model[k].den   = ReadNBits(11, Reader);
@@ -119,29 +119,12 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
       ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
       if(CM->edits != 0){
         ++n;
-//        CM->TM->seq->buf[CM->TM->seq->idx] = sym;
         CM->TM->idx = GetPModelIdxCorr(CM->TM->seq->buf+
         CM->TM->seq->idx-1, CM, CM->TM->idx);
         ComputePModel(CM, pModel[n], CM->TM->idx, CM->TM->den);
         ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, CM->nSym);
         }
       ++n;
-/*
-      GetPModelIdx(pos, cModels[cModel]);
-      ComputePModel(cModels[cModel], pModel[n], cModels[cModel]->pModelIdx,
-      cModels[cModel]->alphaDen);
-      ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, AL->cardinality);
-      if(cModels[cModel]->edits != 0){ // SUBSTITUTIONAL HANDLING
-        ++n;
-        cModels[cModel]->SUBS.idx = GetPModelIdxCorr(cModels[cModel]->SUBS.seq
-        ->buf+cModels[cModel]->SUBS.seq->idx-1, cModels[cModel], cModels[cModel]
-        ->SUBS.idx);
-        ComputePModel(cModels[cModel], pModel[n], cModels[cModel]->SUBS.idx,
-        cModels[cModel]->SUBS.eDen);
-        ComputeWeightedFreqs(WM->weight[n], pModel[n], PT, AL->cardinality);
-        }
-      ++n;
-*/
       }
 
     ComputeMXProbs(PT, MX, AL->cardinality);
@@ -166,7 +149,6 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
     n = 0;
     for(cModel = 0 ; cModel < P[id].nModels ; ++cModel){
       if(cModels[cModel]->edits != 0){      // CORRECT CMODEL CONTEXTS
-        //CorrectCModelSUBS(cModels[cModel], pModel[++n], sym);
         UpdateTolerantModel(cModels[cModel]->TM, pModel[++n], sym);
         }
       ++n;
@@ -322,24 +304,24 @@ int32_t main(int argc, char *argv[]){
     start_decode(Reader);
 
     refNModels = 0;
-    P[n].watermark = ReadNBits(32, Reader);
+    P[n].watermark = ReadNBits( 8, Reader);
     if(P[n].watermark != WATERMARK){
       fprintf(stderr, "Error: Invalid compressed file to decompress!\n");
       return 1;
       }
-    checksum[n]    = ReadNBits(46, Reader);
+    checksum[n]    = ReadNBits(16, Reader);
     P[n].size      = ReadNBits(46, Reader);
     ///////////////////////////////////////////////////////////
-    P[n].low       = ReadNBits(32, Reader);
-    uint32_t nLow  = ReadNBits(32, Reader);
+    P[n].low       = ReadNBits(16, Reader);
+    uint32_t nLow  = ReadNBits( 8, Reader);
     uint32_t x;
     for(x = 0 ; x < nLow ; ++x)
       garbage      = ReadNBits( 8, Reader);
     ///////////////////////////////////////////////////////////
-    cardinality    = ReadNBits(16, Reader);
+    cardinality    = ReadNBits( 9, Reader);
     for(k = 0 ; k < cardinality ; ++k)
-      garbage      = ReadNBits(8,  Reader);
-    P[n].nModels   = ReadNBits(16, Reader);
+      garbage      = ReadNBits( 8,  Reader);
+    P[n].nModels   = ReadNBits( 9, Reader);
     P[n].model     = (ModelPar *) Calloc(P[n].nModels, sizeof(ModelPar));
     for(k = 0 ; k < P[n].nModels ; ++k){
       P[n].model[k].ctx   = ReadNBits( 5, Reader); 
