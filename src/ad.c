@@ -218,12 +218,10 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
 CModel **LoadReference(Parameters *P){
   FILE      *Reader = Fopen(P->ref, "r");
   uint32_t  n, k, idxPos;
-  uint64_t  nSymbols = 0;
+  uint64_t  nSymbols = 0, i = 0;
   uint8_t   *readerBuffer, sym;
   CBUF      *symBuf = CreateCBuffer(BUFFER_SIZE, BGUARD);
   CModel    **cModels;
-
-  uint64_t  i = 0;
 
   if(P->verbose == 1)
     fprintf(stderr, "Building reference model ...\n");
@@ -246,6 +244,7 @@ CModel **LoadReference(Parameters *P){
   P->checksum = 0;
   while((k = fread(readerBuffer, 1, BUFFER_SIZE, Reader)))
     for(idxPos = 0 ; idxPos < k ; ++idxPos){
+
 
       symBuf->buf[symBuf->idx] = sym = AL->revMap[ readerBuffer[idxPos] ];
       P->checksum = (P->checksum + (uint8_t) sym);
