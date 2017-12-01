@@ -73,9 +73,9 @@ uint64_t garbage;
 #define N_MODELS_BITS          9
 #define CTX_BITS               5
 #define ALPHA_DEN_BITS         11
-#define GAMMA_BITS             17
+#define GAMMA_BITS             16
 #define EDITS_BITS             7
-#define E_GAMMA_BITS           17
+#define E_GAMMA_BITS           16
 #define E_DEN_BITS             9
 #define TYPE_BITS              1
 

@@ -421,8 +421,8 @@ ModelPar ArgsUniqModel(char *str, uint8_t type)
       }
     Mp.ctx    = ctx;
     Mp.den    = den;
-    Mp.gamma  = ((int)(gamma * 65536)) / 65536.0;
-    Mp.eGamma = ((int)(eGamma * 65536)) / 65536.0;
+    Mp.gamma  = ((int)(gamma * 65534)) / 65534.0;
+    Mp.eGamma = ((int)(eGamma * 65534)) / 65534.0;
     Mp.edits  = edits;
     Mp.eDen   = eDen;
     Mp.type   = type;

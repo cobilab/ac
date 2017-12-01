@@ -114,10 +114,10 @@ refNModels, INF *I){
   for(n = 0 ; n < P->nModels ; ++n){
     WriteNBits(cModels[n]->ctx,                         CTX_BITS, Writter);
     WriteNBits(cModels[n]->alphaDen,              ALPHA_DEN_BITS, Writter);
-    WriteNBits((int)(cModels[n]->gamma * 65536),      GAMMA_BITS, Writter);
+    WriteNBits((int)(cModels[n]->gamma * 65534),      GAMMA_BITS, Writter);
     WriteNBits(cModels[n]->edits,                     EDITS_BITS, Writter);
     if(cModels[n]->edits != 0){
-      WriteNBits((int)(cModels[n]->eGamma * 65536), E_GAMMA_BITS, Writter);
+      WriteNBits((int)(cModels[n]->eGamma * 65534), E_GAMMA_BITS, Writter);
       WriteNBits(cModels[n]->TM->den,                 E_DEN_BITS, Writter);
       }
     WriteNBits(P->model[n].type,                       TYPE_BITS, Writter);

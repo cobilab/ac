@@ -62,10 +62,10 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   for(k = 0 ; k < P[id].nModels ; ++k){
     P[id].model[k].ctx   = ReadNBits(             CTX_BITS, Reader);
     P[id].model[k].den   = ReadNBits(       ALPHA_DEN_BITS, Reader);
-    P[id].model[k].gamma = ReadNBits(           GAMMA_BITS, Reader) / 65536.0;
+    P[id].model[k].gamma = ReadNBits(           GAMMA_BITS, Reader) / 65534.0;
     P[id].model[k].edits = ReadNBits(           EDITS_BITS, Reader);
     if(P[id].model[k].edits != 0){
-      P[id].model[k].eGamma = ReadNBits(      E_GAMMA_BITS, Reader) / 65536.0;
+      P[id].model[k].eGamma = ReadNBits(      E_GAMMA_BITS, Reader) / 65534.0;
       P[id].model[k].eDen   = ReadNBits(        E_DEN_BITS, Reader);
       }
     P[id].model[k].type  = ReadNBits(            TYPE_BITS, Reader);
@@ -326,10 +326,10 @@ int32_t main(int argc, char *argv[]){
     for(k = 0 ; k < P[n].nModels ; ++k){
       P[n].model[k].ctx   = ReadNBits(         CTX_BITS, Reader); 
       P[n].model[k].den   = ReadNBits(   ALPHA_DEN_BITS, Reader); 
-      P[n].model[k].gamma = ReadNBits(       GAMMA_BITS, Reader) / 65536.0;
+      P[n].model[k].gamma = ReadNBits(       GAMMA_BITS, Reader) / 65534.0;
       P[n].model[k].edits = ReadNBits(       EDITS_BITS, Reader); 
       if(P[n].model[k].edits != 0){
-        P[n].model[k].eGamma = ReadNBits(  E_GAMMA_BITS, Reader) / 65536.0;
+        P[n].model[k].eGamma = ReadNBits(  E_GAMMA_BITS, Reader) / 65534.0;
         P[n].model[k].eDen   = ReadNBits(    E_DEN_BITS, Reader);
         }
       P[n].model[k].type  = ReadNBits(        TYPE_BITS, Reader);
