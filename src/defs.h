@@ -62,6 +62,25 @@ uint64_t garbage;
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+#define WATERMARK_BITS         8
+#define CHECKSUM_BITS          8
+#define SIZE_BITS              40
+#define LOW_BITS               16
+#define N_LOW_BITS             8
+#define LOW_SYM_BITS           8
+#define CARDINALITY_BITS       9
+#define SYM_BITS               8
+#define N_MODELS_BITS          9
+#define CTX_BITS               5
+#define ALPHA_DEN_BITS         11
+#define GAMMA_BITS             17
+#define EDITS_BITS             7
+#define E_GAMMA_BITS           17
+#define E_DEN_BITS             9
+#define TYPE_BITS              1
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 #define BUFFER_SIZE            262144      
 #define PROGRESS_MIN           1000000
 #define MAX_ARRAY_MEMORY       2048    //Size in MBytes
@@ -81,7 +100,7 @@ uint64_t garbage;
 #define MIN_DEN                1
 #define BGUARD                 32
 #define DEFAULT_MAX_COUNT      ((1 << (sizeof(ACC) * 8)) - 1)
-#define CHECKSUMGF             65533
+#define CHECKSUMGF             255
 #define WATERMARK              120
 #define MAX_HISTORYSIZE        1000000
 #define REFERENCE              1
