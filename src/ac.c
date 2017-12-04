@@ -104,7 +104,7 @@ refNModels, INF *I){
     }
 
   // REMAP ALPHABET
-  //// ResetAlphabet(AL);
+  ResetAlphabet(AL);
   // PrintAlphabet(AL);
 
   WriteNBits(AL->cardinality,                   CARDINALITY_BITS, Writter);
