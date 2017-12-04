@@ -76,13 +76,12 @@ refNModels, INF *I){
   WM            = CreateWeightModel(totModels);
   readerBuffer  = (uint8_t *) Calloc(BUFFER_SIZE, sizeof(uint8_t));
 
-  for(n = 0 ; n < P->nModels ; ++n){
+  for(n = 0 ; n < P->nModels ; ++n)
     if(P->model[n].type == TARGET){
       cModels[n] = CreateCModel(P->model[n].ctx, P->model[n].den, TARGET, 
       P->model[n].edits, P->model[n].eDen, AL->cardinality, P->model[n].gamma,
       P->model[n].eGamma);
       }
-    }
 
   if(P->verbose){
     fprintf(stderr, "Done!\n");
@@ -93,35 +92,35 @@ refNModels, INF *I){
   startoutputtingbits();
   start_encode();
 
-  WriteNBits(WATERMARK,                 8, Writter);
-  WriteNBits(P->checksum,              16, Writter);
-  WriteNBits(size,                     46, Writter);
+  WriteNBits(WATERMARK,           WATERMARK_BITS, Writter);
+  WriteNBits(P->checksum,          CHECKSUM_BITS, Writter);
+  WriteNBits(size,                     SIZE_BITS, Writter);
 
   // PRE HEADER : NON FREQUENT SYMBOLS
-  WriteNBits(P->low,                   16, Writter);
-  WriteNBits(AL->nLow,                  8, Writter);
+  WriteNBits(P->low,                    LOW_BITS, Writter);
+  WriteNBits(AL->nLow,                N_LOW_BITS, Writter);
   for(x = 0 ; x < AL->nLow ; ++x){
-    WriteNBits(AL->lowAlpha[x],         8, Writter);
+    WriteNBits(AL->lowAlpha[x],     LOW_SYM_BITS, Writter);
     }
 
   // REMAP ALPHABET
   //// ResetAlphabet(AL);
   // PrintAlphabet(AL);
 
-  WriteNBits(AL->cardinality,           9, Writter);
+  WriteNBits(AL->cardinality,                   CARDINALITY_BITS, Writter);
   for(x = 0 ; x < AL->cardinality ; ++x)
-    WriteNBits(AL->toChars[x],          8, Writter);
-  WriteNBits(P->nModels,                9, Writter);
+    WriteNBits(AL->toChars[x],                          SYM_BITS, Writter);
+  WriteNBits(P->nModels,                           N_MODELS_BITS, Writter);
   for(n = 0 ; n < P->nModels ; ++n){
-    WriteNBits(cModels[n]->ctx,         5, Writter);
-    WriteNBits(cModels[n]->alphaDen,   11, Writter);
-    WriteNBits((int)(cModels[n]->gamma * 65536), 17, Writter);
-    WriteNBits(cModels[n]->edits,       7, Writter);
+    WriteNBits(cModels[n]->ctx,                         CTX_BITS, Writter);
+    WriteNBits(cModels[n]->alphaDen,              ALPHA_DEN_BITS, Writter);
+    WriteNBits((int)(cModels[n]->gamma * 65534),      GAMMA_BITS, Writter);
+    WriteNBits(cModels[n]->edits,                     EDITS_BITS, Writter);
     if(cModels[n]->edits != 0){
-      WriteNBits((int)(cModels[n]->eGamma * 65536), 17, Writter);
-      WriteNBits(cModels[n]->TM->den,   9, Writter);
+      WriteNBits((int)(cModels[n]->eGamma * 65534), E_GAMMA_BITS, Writter);
+      WriteNBits(cModels[n]->TM->den,                 E_DEN_BITS, Writter);
       }
-    WriteNBits(P->model[n].type,        1, Writter);
+    WriteNBits(P->model[n].type,                       TYPE_BITS, Writter);
     }
 
   I[id].header = _bytes_output;

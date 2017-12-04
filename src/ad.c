@@ -42,33 +42,33 @@ void Decompress(Parameters *P, CModel **cModels, uint8_t id){
   startinputtingbits();
   start_decode(Reader);
 
-  P[id].watermark        = ReadNBits( 8, Reader);
-  garbage                = ReadNBits(16, Reader);
-  P[id].size             = ReadNBits(46, Reader);
-  P[id].low              = ReadNBits(16, Reader);
+  P[id].watermark        = ReadNBits(       WATERMARK_BITS, Reader);
+  garbage                = ReadNBits(        CHECKSUM_BITS, Reader);
+  P[id].size             = ReadNBits(            SIZE_BITS, Reader);
+  P[id].low              = ReadNBits(             LOW_BITS, Reader);
   ALPHABET *AL = CreateAlphabet(P[id].low);
   AL->length   = P[id].size;
-  AL->nLow               = ReadNBits( 8, Reader);
+  AL->nLow               = ReadNBits(           N_LOW_BITS, Reader);
   for(x = 0 ; x < AL->nLow ; ++x)
-    AL->lowAlpha[x]      = ReadNBits( 8, Reader);
-  AL->cardinality        = ReadNBits( 9, Reader);
+    AL->lowAlpha[x]      = ReadNBits(         LOW_SYM_BITS, Reader);
+  AL->cardinality        = ReadNBits(     CARDINALITY_BITS, Reader);
   for(x = 0 ; x < 256 ; ++x)
     AL->revMap[x] = INVALID_SYMBOL;
   for(x = 0 ; x < AL->cardinality ; ++x){
-    AL->toChars[x]       = ReadNBits( 8, Reader);
+    AL->toChars[x]       = ReadNBits(             SYM_BITS, Reader);
     AL->revMap[(uint8_t) AL->toChars[x]] = x;
     }
-  P[id].nModels          = ReadNBits( 9, Reader);
+  P[id].nModels          = ReadNBits(        N_MODELS_BITS, Reader);
   for(k = 0 ; k < P[id].nModels ; ++k){
-    P[id].model[k].ctx   = ReadNBits( 5, Reader);
-    P[id].model[k].den   = ReadNBits(11, Reader);
-    P[id].model[k].gamma = ReadNBits(17, Reader) / 65536.0;
-    P[id].model[k].edits = ReadNBits( 7, Reader);
+    P[id].model[k].ctx   = ReadNBits(             CTX_BITS, Reader);
+    P[id].model[k].den   = ReadNBits(       ALPHA_DEN_BITS, Reader);
+    P[id].model[k].gamma = ReadNBits(           GAMMA_BITS, Reader) / 65534.0;
+    P[id].model[k].edits = ReadNBits(           EDITS_BITS, Reader);
     if(P[id].model[k].edits != 0){
-      P[id].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
-      P[id].model[k].eDen   = ReadNBits( 9, Reader);
+      P[id].model[k].eGamma = ReadNBits(      E_GAMMA_BITS, Reader) / 65534.0;
+      P[id].model[k].eDen   = ReadNBits(        E_DEN_BITS, Reader);
       }
-    P[id].model[k].type  = ReadNBits( 1, Reader);
+    P[id].model[k].type  = ReadNBits(            TYPE_BITS, Reader);
     }
 
   PrintAlphabet(AL);
@@ -304,35 +304,35 @@ int32_t main(int argc, char *argv[]){
     start_decode(Reader);
 
     refNModels = 0;
-    P[n].watermark = ReadNBits( 8, Reader);
+    P[n].watermark = ReadNBits(          WATERMARK_BITS, Reader);
     if(P[n].watermark != WATERMARK){
       fprintf(stderr, "Error: Invalid compressed file to decompress!\n");
       return 1;
       }
-    checksum[n]    = ReadNBits(16, Reader);
-    P[n].size      = ReadNBits(46, Reader);
+    checksum[n]    = ReadNBits(           CHECKSUM_BITS, Reader);
+    P[n].size      = ReadNBits(               SIZE_BITS, Reader);
     ///////////////////////////////////////////////////////////
-    P[n].low       = ReadNBits(16, Reader);
-    uint32_t nLow  = ReadNBits( 8, Reader);
+    P[n].low       = ReadNBits(                LOW_BITS, Reader);
+    uint32_t nLow  = ReadNBits(              N_LOW_BITS, Reader);
     uint32_t x;
     for(x = 0 ; x < nLow ; ++x)
-      garbage      = ReadNBits( 8, Reader);
+      garbage      = ReadNBits(            LOW_SYM_BITS, Reader);
     ///////////////////////////////////////////////////////////
-    cardinality    = ReadNBits( 9, Reader);
+    cardinality    = ReadNBits(        CARDINALITY_BITS, Reader);
     for(k = 0 ; k < cardinality ; ++k)
-      garbage      = ReadNBits( 8,  Reader);
-    P[n].nModels   = ReadNBits( 9, Reader);
+      garbage      = ReadNBits(                SYM_BITS,  Reader);
+    P[n].nModels   = ReadNBits(           N_MODELS_BITS, Reader);
     P[n].model     = (ModelPar *) Calloc(P[n].nModels, sizeof(ModelPar));
     for(k = 0 ; k < P[n].nModels ; ++k){
-      P[n].model[k].ctx   = ReadNBits( 5, Reader); 
-      P[n].model[k].den   = ReadNBits(11, Reader); 
-      P[n].model[k].gamma = ReadNBits(17, Reader) / 65536.0; 
-      P[n].model[k].edits = ReadNBits( 7, Reader); 
+      P[n].model[k].ctx   = ReadNBits(         CTX_BITS, Reader); 
+      P[n].model[k].den   = ReadNBits(   ALPHA_DEN_BITS, Reader); 
+      P[n].model[k].gamma = ReadNBits(       GAMMA_BITS, Reader) / 65534.0;
+      P[n].model[k].edits = ReadNBits(       EDITS_BITS, Reader); 
       if(P[n].model[k].edits != 0){
-        P[n].model[k].eGamma = ReadNBits(17, Reader) / 65536.0;
-        P[n].model[k].eDen   = ReadNBits( 9, Reader);
+        P[n].model[k].eGamma = ReadNBits(  E_GAMMA_BITS, Reader) / 65534.0;
+        P[n].model[k].eDen   = ReadNBits(    E_DEN_BITS, Reader);
         }
-      P[n].model[k].type  = ReadNBits( 1, Reader);
+      P[n].model[k].type  = ReadNBits(        TYPE_BITS, Reader);
       if(P[n].model[k].type == 1)
         ++refNModels;
       }
