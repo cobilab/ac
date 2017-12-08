@@ -90,6 +90,7 @@ After AC intallation, run the following:
 <pre>
 wget http://sweet.ua.pt/pratas/datasets/AminoAcidsCorpus.zip
 unzip AminoAcidsCorpus.zip
+cp AminoAcidsCorpus/HI .
 ./AC -v -l 2 HI
 ./AD -v HI.co
 cmp HI HI.de
