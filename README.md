@@ -49,7 +49,7 @@ Non-mandatory arguments:
   -v                     verbose mode (more information),              
   -V                     display version number,                       
   -f                     force overwrite of output,                    
-  -l &#60level&#62             level of compression [1;5] (lazy -tm setup),  
+  -l &#60level&#62             level of compression [1;7] (lazy -tm setup),  
   -t &#60threshold&#62         threshold frequency to discard from alphabet,
   -e                     it creates a file with the extension ".iae" 
                          with the respective information content.      
@@ -57,8 +57,8 @@ Non-mandatory arguments:
   -rm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  reference model (-rm 1:10:0.9/0:0:0),   
   -rm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  reference model (-rm 5:90:0.9/1:50:0.8),
   ...                                                                  
-  -tm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  target model (-tm 1:1:0.8/0/0/0),       
-  -tm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  target model (-tm 7:100:0.9/2:100.85),  
+  -tm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  target model (-tm 1:1:0.8/0:0:0),       
+  -tm &#60c&#62:&#60d&#62:&#60g&#62/&#60m&#62:&#60e&#62:&#60a&#62  target model (-tm 7:100:0.9/2:10:0.85),  
   ...                                                                  
                          target and reference templates use &#60c&#62 for    
                          context-order size, &#60d&#62 for alpha (1/&#60d&#62), &#60g&#62
@@ -88,13 +88,13 @@ Report bugs to &#60{pratas,ap}@ua.pt&#62.
 
 After AC intallation, run the following:
 <pre>
-wget http://www.data-compression.info/files/corpora/proteincorpus.zip
-unzip proteincorpus.zip
-./AC -v -l 2 hi
-./AD -v hi.co
-cmp hi hi.de
+wget http://sweet.ua.pt/pratas/datasets/AminoAcidsCorpus.zip
+unzip AminoAcidsCorpus.zip
+./AC -v -l 2 HI
+./AD -v HI.co
+cmp HI HI.de
 </pre>
-It will download four amino acid sequences and compress and decompress the smallest (hi). Finally, it compares if the uncompressed sequence is equal to the original.
+It will download nine amino acid sequences and compress and decompress one of the smallest (HI). Finally, it compares if the uncompressed sequence is equal to the original.
 
 ## 4. CITATION ##
 
