@@ -15,10 +15,13 @@ double gamma, double eGamma){
   CModel *M = (CModel *) Calloc(1, sizeof(CModel));
   U64    prod = 1, *mult;
   U32    n;
+  double tmp;
 
   M->nSym        = nSym;
   mult           = (U64 *) Calloc(ctx, sizeof(U64));
-  M->nPModels    = (U64) pow(M->nSym, ctx);
+  tmp            = pow(M->nSym, ctx);
+  M->nPModels    = (U64) tmp;
+  //M->nPModels  = (U64) pow(M->nSym, ctx);
   M->ctx         = ctx;
   M->alphaDen    = aDen;
   M->edits       = edits;
@@ -27,7 +30,8 @@ double gamma, double eGamma){
   M->pModelIdx   = 0;
   M->ref         = ref == 0 ? 0 : 1;
 
-  if((ULL)(M->nPModels) * M->nSym * sizeof(ACC) >> 20 > MAX_ARRAY_MEMORY){
+  //if((ULL)(M->nPModels) * M->nSym * sizeof(ACC) >> 20 > MAX_ARRAY_MEMORY || tmp > UINT64_MAX){
+  if(tmp * (double)M->nSym * (double)sizeof(ACC) / pow(2,20) > MAX_ARRAY_MEMORY || tmp >= UINT64_MAX){
     M->mode = HASH_TABLE_MODE;
     M->HT   = CreateHashTable(M->nSym);
     }
@@ -76,7 +80,6 @@ void ComputePModel(CModel *M, PModel *P, uint64_t idx, uint32_t aDen){
   HCC *hc;
   uint32_t x;
   switch(M->mode){
-
     case HASH_TABLE_MODE:
       if(!(hc = GetHCCounters(M->HT, idx)))
         hc = (HCC *) M->HT->zeroCounters;
