@@ -1,6 +1,7 @@
 <p align="center"><img src="imgs/logo.png"
 alt="AC" width="298" border="0" /></p>
-<br>
+
+[![Build Status](https://travis-ci.org/pratas/ac.svg?branch=master)](https://travis-ci.org/pratas/ac)
 
 <p align="center"><b>AC: a lossless compressor for amino acid sequences.</b></p></br>
 <p align="justify">
