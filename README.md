@@ -83,7 +83,7 @@ Example:
   [Compress]   ./AC -v -tm 1:1:0.8/0:0:0 -tm 5:20:0.9/3:20:0.9 seq.txt 
   [Decompress] ./AD -v seq.txt.co      
 
-Report bugs to &#60{pratas,ap}@ua.pt&#62.                            
+Report bugs to &#60{pratas,seyedmorteza,ap}@ua.pt&#62.                            
 </pre>
 
 ## 3. EXAMPLE ##
