@@ -1,9 +1,10 @@
 <p align="center"><img src="imgs/logo.png"
 alt="AC" width="298" border="0" /></p>
+<br>
+<p align="center"><b>AC: a lossless compressor for amino acid sequences.</b></p></br>
 
 [![Build Status](https://travis-ci.org/pratas/ac.svg?branch=master)](https://travis-ci.org/pratas/ac)
 
-<p align="center"><b>AC: a lossless compressor for amino acid sequences.</b></p></br>
 <p align="justify">
 <b>AC</b> is a new lossless compressor to compress efficiently amino acid sequences (proteins). It uses a cooperation between multiple context and substitutional tolerant context models. The cooperation between models is balanced with weights that benefit the models with better performance according to a forgetting function specific for each model.
 
