@@ -53,7 +53,7 @@ void PrintMenu(void){
   "  -v                     verbose mode (more information),              \n"
   "  -V                     display version number,                       \n"
   "  -f                     force overwrite of output,                    \n"
-  "  -l <level>             level of compression [1;5] (lazy -tm setup),  \n"
+  "  -l <level>             level of compression [1;7] (lazy -tm setup),  \n"
   "  -t <threshold>         threshold frequency to discard from alphabet,\n");
   #ifdef ESTIMATE
   fprintf(stderr,

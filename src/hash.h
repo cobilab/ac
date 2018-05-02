@@ -29,7 +29,7 @@ HASH;
 
 uint64_t     ZHASH               (uint64_t);
 HASH         *CreateHashTable    (uint32_t);
-void         InsertKey           (HASH *, uint32_t, uint64_t, uint8_t);
+void         InsertKey           (HASH *, uint32_t, uint64_t, uint32_t);
 HCC          *GetHCCounters      (HASH *, uint64_t);
 void         UpdateHashCounter   (HASH *, uint32_t, uint64_t);
 void         RemoveHashTable     (HASH *);

@@ -30,7 +30,7 @@ HASH *CreateHashTable(uint32_t nSym){
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-void InsertKey(HASH *H, uint32_t hi, uint64_t key, uint8_t s){
+void InsertKey(HASH *H, uint32_t hi, uint64_t key, uint32_t s){
   H->entries[hi] = (ENTRY *) Realloc(H->entries[hi], 
                    (H->entrySize[hi] + 1) * sizeof(ENTRY), sizeof(ENTRY));
   H->entries[hi][H->entrySize[hi]].counters = (HCC *) Calloc(s, sizeof(HCC));
