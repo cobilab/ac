@@ -151,8 +151,8 @@ void RemoveAlphabet(ALPHABET *A){
   Free(A->revMap);
   Free(A->alphabet);
   Free(A->mask);
-  if(A->nLow > 0)
-    Free(A->lowAlpha);
+  Free(A->counts);
+  Free(A->lowAlpha);
   Free(A);
   }
 
