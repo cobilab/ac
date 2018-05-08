@@ -200,11 +200,13 @@ refNModels, INF *I){
     }
   #endif
 
-  Free(MX);
+  RemovePModel(MX);
   Free(name);
   for(n = 0 ; n < P->nModels ; ++n)
-    if(P->model[n].type == REFERENCE)
+    if(P->model[n].type == REFERENCE) {
       ResetCModelIdx(cModels[n]);
+      RemoveCModel(cModels[n]);
+    }
     else
       RemoveCModel(cModels[n]);
   for(n = 0 ; n < totModels ; ++n){
@@ -212,12 +214,12 @@ refNModels, INF *I){
     }
   Free(pModel);
 
-  Free(PT);
+  RemoveFPModel(PT);
   Free(readerBuffer);
   RemoveCBuffer(symBuf);
+  int card = AL->cardinality;
   RemoveAlphabet(AL);
   RemoveWeightModel(WM);
-  int card = AL->cardinality;
   fclose(Reader);
 
   if(P->verbose == 1)
@@ -441,7 +443,15 @@ int32_t main(int argc, char *argv[]){
   (log2(cardinality)*totalSize));  
 
   fprintf(stdout, "Average Shannon entropy: %.6g\n", se_average);
-
+  if(P->level != 0){
+    Free(xargv[0]);
+    Free(xargv);
+  }
+  Free(I);
+  Free(refModels);
+  Free(P->model);
+  Free(P->tar);
+  Free(P);
   stop = clock();
   fprintf(stdout, "Spent %g sec.\n", ((double)(stop-start))/CLOCKS_PER_SEC);
 

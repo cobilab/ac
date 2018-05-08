@@ -85,6 +85,7 @@ void RemoveHashTable(HASH *H){
     }
   Free(H->entries);
   Free(H->entrySize);
+  Free(H->zeroCounters);
   Free(H);
   }
 
