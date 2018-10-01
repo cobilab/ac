@@ -103,7 +103,7 @@ It will download nine amino acid sequences and compress and decompress one of th
 
 On using this tool/method, please, cite:
 
-(Coming soon)
+Pratas, D., Hosseini, M. and Pinho, A.J., 2018, May. Compression of Amino Acid Sequences. In International Conference on Practical Applications of Computational Biology &amp; Bioinformatics (pp. 105-113). Springer, Cham.
 
 ## 5. ISSUES ##
 
