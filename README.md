@@ -102,6 +102,8 @@ It will download nine amino acid sequences and compress and decompress one of th
 
 On using this tool/method, please, cite:
 
+Hosseini, M., Pratas, D. & Pinho, A.J., 2019, Feb. AC: A Compression Tool for Amino Acid Sequences. Interdiscip Sci Comput Life Sci (2019). https://doi.org/10.1007/s12539-019-00322-1
+
 Pratas, D., Hosseini, M. and Pinho, A.J., 2018, May. Compression of Amino Acid Sequences. In International Conference on Practical Applications of Computational Biology &amp; Bioinformatics (pp. 105-113). Springer, Cham.
 
 ## 5. ISSUES ##
