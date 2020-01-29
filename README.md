@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/cobilab/ac.svg?branch=master)](https://travis-ci.org/cobilab/ac)
+![Conda](https://img.shields.io/conda/dn/bioconda/ac)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
 <p align="center"><img src="imgs/logo.png"
 alt="AC" width="200" border="0" /></p>
